@@ -1,6 +1,6 @@
-﻿namespace Time_Sheet_Constructor
+﻿namespace Time_Sheet_Constructor.Model
 {
-    class Person
+    public class Person
     {
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
@@ -10,10 +10,16 @@
 
         public Person() { }
 
+        public Person(string firstName, string lastName, Day[] schedule)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Schedule = schedule;
+        }
 
-        
-
-        
-
+        public override string ToString()
+        {
+            return $"{LastName} {MiddleName} {FirstName}";
+        }
     }
 }

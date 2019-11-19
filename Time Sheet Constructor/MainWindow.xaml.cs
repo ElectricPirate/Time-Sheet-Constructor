@@ -14,16 +14,15 @@ namespace Time_Sheet_Constructor
         public MainWindow()
         {
             InitializeComponent();
-            const string filepath = @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\ТабеапрапрльСПБ.xlsx";
+            const string filepath = @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\ТабельСПБ.xlsx";
             var existingFile = new FileInfo(filepath);
             var table = new ExcelPackage(existingFile);
-            Sheets.ItemsSource = FileParser.GetSheetsList(table);
-            
-            var SheetsList = FileParser.GetSheetsList(table);
+            SheetsList.ItemsSource = FileParser.GetSheetsList(table);
 
             var Cells = new List<string>();
+            var Sheets = FileParser.GetSheetsList(table);
 
-            foreach (var sheet in SheetsList)
+            foreach (var sheet in Sheets)
             {
                 var currentPers = FileParser.GetPersonCellRow(table, sheet);
                 var currentLastRow = FileParser.GetLastRowNumber(table, sheet);
@@ -31,6 +30,16 @@ namespace Time_Sheet_Constructor
             }
 
             SheetsCells.ItemsSource = Cells;
+
+            var Persons = FileParser.GetPersons(table);
+            var stringPers = new List<string>();
+            foreach (var person in Persons)
+            {
+                stringPers.Add(person.ToString());
+            }
+            PersonsList.ItemsSource = stringPers;
+
+
 
         }
 

@@ -8,9 +8,10 @@
         Title="MainWindow" Height="450" Width="800">
     <!--<StackPanel Orientation="Horizontal">-->
         <Grid>
-        <ListBox x:Name="Sheets" RenderTransformOrigin="0.274,0.488" Margin="10,0,0,0"> </ListBox>
-        <ListBox x:Name="SheetsCells" Margin="126,0,0,0" RenderTransformOrigin="-0.607,0.486" />
+        <ListBox x:Name="SheetsList"  Margin="0,0,666,0"> </ListBox>
+        <ListBox x:Name="SheetsCells" Margin="126,0,271,0" RenderTransformOrigin="-0.607,0.486"></ListBox>
+        <ListBox x:Name="PersonsList" Margin="521,0,0,0" RenderTransformOrigin="-0.607,0.486"></ListBox>
 
-        <!--</StackPanel>-->
+                <!--</StackPanel>-->
         </Grid>
 </Window>

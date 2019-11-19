@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using OfficeOpenXml;
+using System.Collections.Generic;
 using System.IO;
-using OfficeOpenXml;
+using System.Windows;
+using Time_Sheet_Constructor.Model;
 
 namespace Time_Sheet_Constructor.Model
 {
     
-    public static class FileParser 
+    public static class FileParser
     {
-        public static string FilePath { get; set; }
-        
         public static List<string> GetSheetsList(ExcelPackage file)
         {
             var sheets = new List<string>();
@@ -61,5 +61,26 @@ namespace Time_Sheet_Constructor.Model
 
             return currentRow;
         }
+
+        public static List<Person> GetPersons(ExcelPackage file)
+        {
+            const string sheet = "Всего";
+            var persons = new List<Person>();
+            
+            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
+            var lastLineFio = GetLastRowNumber(file, sheet);
+
+            for (var row = firstFioLine; row <= lastLineFio; row++)
+            {
+                var names = file.Workbook.Worksheets[sheet].Cells[row, 1].Value.ToString().Split(' ');
+                var lastName = names[0];
+                var firstName = names[1];
+                persons.Add(new Person() {FirstName = firstName, LastName = lastName});
+            }
+
+            return persons;
+        }
+
+
     }
 }

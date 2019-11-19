@@ -1,4 +1,4 @@
-﻿namespace Time_Sheet_Constructor
+﻿namespace Time_Sheet_Constructor.Model
 {/// <summary>
 /// День
 /// </summary>
