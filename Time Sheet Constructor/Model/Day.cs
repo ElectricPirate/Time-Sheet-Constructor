@@ -42,18 +42,5 @@
         public string Absense { get; set; }
 
         public Day() { }
-
-        public Day(double allWorkTime, double nightWorkTime, bool dayOff, bool sickDay, bool vacationDay,
-            bool unpaidLeave, bool educationalLeave, string absense)
-        {
-            AllWorkTime = allWorkTime;
-            NightWorkTime = nightWorkTime;
-            DayOff = dayOff;
-            SickDay = sickDay;
-            VacationDay = vacationDay;
-            UnpaidLeave = unpaidLeave;
-            EducationalLeave = educationalLeave;
-            Absense = absense;
-        }
     }
 }

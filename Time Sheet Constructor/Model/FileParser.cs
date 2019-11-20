@@ -1,12 +1,10 @@
 ﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Windows;
-using Time_Sheet_Constructor.Model;
 
 namespace Time_Sheet_Constructor.Model
 {
-    
+
     public static class FileParser
     {
         public static List<string> GetSheetsList(ExcelPackage file)
@@ -81,6 +79,75 @@ namespace Time_Sheet_Constructor.Model
             return persons;
         }
 
+        public static List<Person> GetAllWorkTime(ExcelPackage file, List<Person> persons)
+        {
+            const string sheet = "Всего";
+            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
+            var lastLineFio = GetLastRowNumber(file, sheet);
 
+            foreach (var person in persons)
+            {
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    if (person.ToString().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    {
+                        
+                        for (var column = 2; column <= 32; column++)
+                        {
+                            var dayNumber = column - 2;
+                            var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
+
+                            if (current == null)
+                            {
+                                person.Schedule.Add(new Day {AllWorkTime = 0, Number = dayNumber});
+                            }
+                            else
+                            {
+                                person.Schedule.Add(new Day {AllWorkTime = Convert.ToDouble(current), Number = dayNumber });
+                            }
+
+                            dayNumber++;
+                        }
+                    }
+                }
+            }
+
+            return persons;
+        }
+
+        public static List<Person> GetNightWorkTime(ExcelPackage file, List<Person> persons)
+        {
+            const string sheet = "Ночные";
+            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
+            var lastLineFio = GetLastRowNumber(file, sheet);
+
+            foreach (var person in persons)
+            {
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    if (person.ToString().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    {
+                        for (var column = 2; column <= 32; column++)
+                        {
+                            var dayNumber = column - 2;
+                            var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
+
+                            if (current == null)
+                            {
+                                person.Schedule[dayNumber].NightWorkTime=0;
+                            }
+                            else
+                            {
+                                person.Schedule[dayNumber].NightWorkTime = Convert.ToDouble(current);
+                            }
+
+                            dayNumber++;
+                        }
+                    }
+                }
+            }
+
+            return persons;
+        }
     }
 }
