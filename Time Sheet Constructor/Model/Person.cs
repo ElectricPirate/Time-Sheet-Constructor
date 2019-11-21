@@ -11,18 +11,22 @@ namespace Time_Sheet_Constructor.Model
         /// Имя
         /// </summary>
         public string FirstName { get; set; }
+
         /// <summary>
         /// Отчество
         /// </summary>
         public string MiddleName { get; set; }
+
         /// <summary>
         /// Фамилия
         /// </summary>
         public string LastName { get; set; }
+
         /// <summary>
         /// Табельный номер
         /// </summary>
         public int EmployeeId { get; set; }
+
         /// <summary>
         /// Расписание
         /// </summary>
@@ -33,9 +37,22 @@ namespace Time_Sheet_Constructor.Model
             Schedule = new List<Day>();
         }
 
-        public override string ToString()
+        /// <summary>
+        /// Фамилия + Имя
+        /// </summary>
+        /// <returns></returns>
+        public string GetShortName()
         {
             return $"{LastName} {FirstName}";
+        }
+
+        /// <summary>
+        /// Фамилия + Имя + Отчество
+        /// </summary>
+        /// <returns></returns>
+        public string GetFullName()
+        {
+            return $"{LastName} {FirstName} {MiddleName}";
         }
 
     }
