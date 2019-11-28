@@ -216,6 +216,9 @@ namespace Time_Sheet_Constructor.Model
             return persons;
         }
 
+
+        /// TODO: оптимизировать методы ниже, они ужасные
+
         /// <summary>
         /// Получение больничных
         /// </summary>

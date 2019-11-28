@@ -69,7 +69,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\DataExport.cs" />
     <Compile Include="Model\Day.cs" />
+    <Compile Include="Model\EmpoyeeIDParser.cs" />
     <Compile Include="Model\FileParser.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
