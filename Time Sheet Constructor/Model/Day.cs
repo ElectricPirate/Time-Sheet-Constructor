@@ -1,4 +1,6 @@
-﻿namespace Time_Sheet_Constructor.Model
+﻿using System.ComponentModel;
+
+namespace Time_Sheet_Constructor.Model
 {
     /// <summary>
     /// День
@@ -50,6 +52,42 @@
         /// </summary>
         public bool Truancy { get; set; }
 
-        public Day() { }
+        public bool IsCrossing => GetCrossings();
+
+        private bool GetCrossings()
+        {
+            var count = 0;
+
+            if (AllWorkTime != 0)
+            {
+                if (DayOff)
+                {
+                    count++;
+                }
+
+                if (SickDay)
+                {
+                    count++;
+                }
+
+                if (VacationDay)
+                {
+                    count++;
+                }
+
+                if (UnpaidLeave)
+                {
+                    count++;
+                }
+
+                if (EducationalLeave)
+                {
+                    count++;
+                }
+            }
+
+            return count > 0;
+        }
+
     }
 }

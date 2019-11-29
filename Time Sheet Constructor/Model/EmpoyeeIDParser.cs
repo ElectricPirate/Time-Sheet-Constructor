@@ -23,7 +23,7 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         /// 
         static string EmployeeFilePath_xls =
-            @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\Список от 15.11.xls";
+            @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\оо 2911.xls";
 
         /// <summary>
         /// Данные файла
