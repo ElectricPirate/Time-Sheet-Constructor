@@ -11,10 +11,18 @@ using OfficeOpenXml.Style;
 
 namespace Time_Sheet_Constructor.Model
 {
-    public class DataExport
+    /// <summary>
+    /// Лист Чистовик
+    /// </summary>
+    public class ExportFair
     {
         const string tableLayoutPath =
             @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\Табель Шаблон.xlsx";
+
+        private const string outputName =
+            @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\Табель Выход.xlsx";
+
+        const string fairSheetName = "Чистовик";
 
         /// <summary>
         /// Данные файла
@@ -31,16 +39,13 @@ namespace Time_Sheet_Constructor.Model
 
         private static int FirstDayColumn = 4;
         private static int LastDayColumn = 34;
-
-        public static void FirstHalf(List<Person> persons)
+       
+        public static void Write(List<Person> persons)
         {
-            
-
             using (var wb = Excel)
             {
                 var row = FirstRow;
                 var id = 1;
-                
 
                 foreach (var person in persons)
                 {
@@ -51,9 +56,9 @@ namespace Time_Sheet_Constructor.Model
                         continue;
                     }
                     
-                    wb.Workbook.Worksheets["Чистовик"].Cells[row, FirstColumn].Value = id;
-                    wb.Workbook.Worksheets["Чистовик"].Cells[row, FirstColumn + 1].Value = person.GetFullName();
-                    wb.Workbook.Worksheets["Чистовик"].Cells[row, FirstColumn + 2].Value = person.EmployeeId;
+                    wb.Workbook.Worksheets[fairSheetName].Cells[row, FirstColumn].Value = id;
+                    wb.Workbook.Worksheets[fairSheetName].Cells[row, FirstColumn + 1].Value = person.GetFullName();
+                    wb.Workbook.Worksheets[fairSheetName].Cells[row, FirstColumn + 2].Value = person.EmployeeId;
 
                     for (var column = FirstDayColumn; column <= LastDayColumn; column++)
                     {
@@ -64,50 +69,50 @@ namespace Time_Sheet_Constructor.Model
 
                         if (person.Schedule[scheduleDay].AllWorkTime != 0)
                         {
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value += "Я";
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 1, column].Value = 
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value += "Я";
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 1, column].Value = 
                                 person.Schedule[scheduleDay].AllWorkTime;
                         }
 
                         if (person.Schedule[scheduleDay].NightWorkTime != 0)
                         {
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value = "Я";
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row, column].Value =
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value = "Я";
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row, column].Value =
                                 person.Schedule[scheduleDay].NightWorkTime;
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 2, column].Value += "Н";
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 2, column].Value += "Н";
                         }
 
                         if (person.Schedule[scheduleDay].Truancy)
                         {
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value += "НН";
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value += "НН";
                         }
 
                         if (person.Schedule[scheduleDay].EducationalLeave)
                         {
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value += "У";
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value += "У";
                         }
 
                         if (person.Schedule[scheduleDay].VacationDay)
                         {
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value += "ОТ";
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value += "ОТ";
                         }
 
                         if (person.Schedule[scheduleDay].UnpaidLeave)
                         {
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value += "ДО";
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value += "ДО";
                         }
 
                         if (person.Schedule[scheduleDay].SickDay)
                         {
-                            wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value += "Б";
+                            wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value += "Б";
                         }
 
                         if (person.Schedule[scheduleDay].DayOff)
                         {
-                            if (wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value == null)
+                            if (wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value == null)
                             {
-                                wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value =
-                                    wb.Workbook.Worksheets["Чистовик"].Cells[row + 3, column].Value?.ToString() + "В";
+                                wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value =
+                                    wb.Workbook.Worksheets[fairSheetName].Cells[row + 3, column].Value?.ToString() + "В";
                             }
                         }
 
@@ -118,7 +123,7 @@ namespace Time_Sheet_Constructor.Model
                     id++;
                 }
 
-                wb.SaveAs(new FileInfo(@"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\Табель Выход.xlsx"));
+                wb.SaveAs(new FileInfo(outputName));
             }
         }
     }

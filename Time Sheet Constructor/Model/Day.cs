@@ -56,37 +56,7 @@ namespace Time_Sheet_Constructor.Model
 
         private bool GetCrossings()
         {
-            var count = 0;
-
-            if (AllWorkTime != 0)
-            {
-                if (DayOff)
-                {
-                    count++;
-                }
-
-                if (SickDay)
-                {
-                    count++;
-                }
-
-                if (VacationDay)
-                {
-                    count++;
-                }
-
-                if (UnpaidLeave)
-                {
-                    count++;
-                }
-
-                if (EducationalLeave)
-                {
-                    count++;
-                }
-            }
-
-            return count > 0;
+            return AllWorkTime != 0 && SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy;
         }
 
     }

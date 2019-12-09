@@ -31,7 +31,7 @@ namespace Time_Sheet_Constructor
             
             Persons = EmpoyeeIDParser.Parse(Persons);
 
-            DataExport.FirstHalf(Persons);
+            ExportDraft.Write(Persons);
 
             var Problems = new List<Tuple<string, int>>();
 
@@ -52,7 +52,11 @@ namespace Time_Sheet_Constructor
                 }
             }
 
-            MessageBox.Show($"Проблем: {Problems.Count.ToString()}");
+            ProblemsList.ItemsSource = Problems;
+
+            //MessageBox.Show(Problems[0].ToString());
+
+            //MessageBox.Show($"Проблем: {Problems.Count.ToString()}");
 
             //foreach (var problem in Problems)
             //{
