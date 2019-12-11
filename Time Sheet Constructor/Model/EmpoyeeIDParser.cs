@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using Microsoft.Office.Interop.Excel;
 using OfficeOpenXml;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
@@ -22,24 +23,22 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Путь к .xls файлу со списком сотрудников
         /// </summary>
-        /// 
-        static string EmployeeFilePath_xls =
-            @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\оо 2911.xls";
+        public static string EmployeeFilePath_xls => MainWindow.EmployeeFilePath;
 
         /// <summary>
         /// Данные файла
         /// </summary>
-        static FileInfo Fi_xls => new FileInfo(EmployeeFilePath_xls);
+        static FileInfo Fi_xls = new FileInfo(EmployeeFilePath_xls);
 
         /// <summary>
         /// Путь к .xlsx файлу со списком сотрудников
         /// </summary>
-        static string EmployeeFilePath_xlsx = ConvertXLS_XLSX(Fi_xls);
+        static string EmployeeFilePath_xlsx => ConvertXLS_XLSX(Fi_xls);
 
         /// <summary>
         /// Данные файла
         /// </summary>
-        static FileInfo Fi_xlsx => new FileInfo(EmployeeFilePath_xlsx);
+        static FileInfo Fi_xlsx = new FileInfo(EmployeeFilePath_xlsx);
 
 
         static ExcelPackage Excel => new ExcelPackage(Fi_xlsx);

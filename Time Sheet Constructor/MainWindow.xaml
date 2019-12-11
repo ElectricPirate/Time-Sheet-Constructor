@@ -5,8 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Time_Sheet_Constructor"
         mc:Ignorable="d"
-        Title="MainWindow" Height="728.686" Width="800">
-    <Grid>
-        <ListBox x:Name="ProblemsList" Margin="10,10,601,0" />
-    </Grid>
+        Title="Конструктор табеля" Height="360" Width="640">
+    <StackPanel Margin="10,10,10,10" Orientation="Vertical">
+
+        <StackPanel Orientation="Vertical" Height="60">
+            <TextBlock><Run Text="Отчет ТабельСПБ из Teleopti Perfomance Manager"/></TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name = "TextBox_TeleoptiReportPath" IsReadOnly="True" Width="300" Height="20" Margin="5,5,5,5"/>
+                <Button x:Name="Button_SelectTeleoptiReportPath" Content="Выбрать файл" Click="TeleoptiReportPath_Click" Height="25" Width="90"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Height="60">
+            <TextBlock><Run Text="Файл со списком сотрудников ОО"/></TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name = "TextBox_EmployeeFilePath" IsReadOnly="True" Width="300" Height="20" Margin="5,5,5,5"/>
+                <Button x:Name="Button_SelectEmployeeFilePath" Content="Выбрать файл" Click="EmployeeFilePath_Click" Height="25" Width="90"/>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Height="80">
+            <TextBlock Text="С:" Width="20" Margin="10,30,0,0"/>
+            <TextBox x:Name = "TextBox_FirstDay" TextChanged="TextBox_FirstDay_OnTextChanged" Width="20" Height="20" />
+            <TextBlock Text="По:" Margin="10,30,0,0" Width="24"/>
+            <TextBox x:Name = "TextBox_LastDay" TextChanged="TextBox_LastDay_OnTextChanged" Width="20" Height="20" />
+            <Button x:Name="Button_Start" Content="Начать" Click="Start_Click" Height="30" Width="100" Margin="20"/>
+        </StackPanel>
+
+
+
+    </StackPanel>
+
 </Window>

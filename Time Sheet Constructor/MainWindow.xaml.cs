@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using Microsoft.Win32;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using Time_Sheet_Constructor.Model;
 
@@ -14,81 +18,66 @@ namespace Time_Sheet_Constructor
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static string EmployeeFilePath { get; set; }
+
+        public static string TeleoptiReportPath { get; set; }
+
+        public static int FirstDay { get; set; }
+
+        public static int LastDay { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
-
-            const string filepath = @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\ТабельСПБ.xlsx";
-
-            
-
-
-            var existingFile = new FileInfo(filepath);
-            var table = new ExcelPackage(existingFile);
-
-            var Persons = FileParser.GetData(table);
-            var TableExport = new ExcelPackage();
-            
-            Persons = EmpoyeeIDParser.Parse(Persons);
-
-            ExportDraft.Write(Persons);
-
-            var Problems = new List<Tuple<string, int>>();
-
-            foreach (var person in Persons)
-            {
-                if (person.EmployeeId == 0)
-                {
-                    continue;
-                }
-
-                foreach (var day in person.Schedule)
-                {
-                    if (day.IsCrossing)
-                    {
-                        var problem = (name: person.GetShortName(), day: day.Number);
-                        Problems.Add(new Tuple<string, int> (problem.name, problem.day));
-                    }
-                }
-            }
-
-            ProblemsList.ItemsSource = Problems;
-
-            //MessageBox.Show(Problems[0].ToString());
-
-            //MessageBox.Show($"Проблем: {Problems.Count.ToString()}");
-
-            //foreach (var problem in Problems)
-            //{
-            //    MessageBox.Show($"Обнаружено пересечение: {problem.Item1} {problem.Item2.ToString()}");
-            //}
-
-            var s = 1;
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
 
+        private void TeleoptiReportPath_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog myDialog = new OpenFileDialog();
+            myDialog.Filter = "Книга Excel(*.xlsx;*.xls)|*.xlsx;*.xls" + "|Все файлы (*.*)|*.* ";
+            myDialog.CheckFileExists = true;
+            myDialog.Multiselect = true;
+            if (myDialog.ShowDialog() == true)
+            {
+                TextBox_TeleoptiReportPath.Text = myDialog.FileName;
+                TeleoptiReportPath = myDialog.FileName;
+            }
+        }
+
+        private void EmployeeFilePath_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog myDialog = new OpenFileDialog();
+            myDialog.Filter = "Книга Excel(*.xlsx;*.xls)|*.xlsx;*.xls" + "|Все файлы (*.*)|*.* ";
+            myDialog.CheckFileExists = true;
+            myDialog.Multiselect = true;
+            if (myDialog.ShowDialog() == true)
+            {
+                TextBox_EmployeeFilePath.Text = myDialog.FileName;
+                EmployeeFilePath = myDialog.FileName;
+            }
+        }
+
+        private void Start_Click(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrWhiteSpace(TextBox_TeleoptiReportPath.Text) || String.IsNullOrWhiteSpace(TextBox_EmployeeFilePath.Text))
+            {
+                throw new ArgumentNullException("Выберите путь к файлу отчета.");
+            }
+            
+            Main.Start();
+        }
+
+        private void TextBox_FirstDay_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            FirstDay = Convert.ToInt32(TextBox_FirstDay.Text);
+        }
+
+        private void TextBox_LastDay_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            LastDay = Convert.ToInt32(TextBox_LastDay.Text);
+        }
+
+        
     }
 }

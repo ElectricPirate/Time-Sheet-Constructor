@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using OfficeOpenXml;
+using Time_Sheet_Constructor.Annotations;
 
-namespace Time_Sheet_Constructor.Model
+namespace Time_Sheet_Constructor.Model 
 {
     /// <summary>
     /// Заполнение черновика
@@ -18,14 +21,14 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Путь шаблона табеля
         /// </summary>
-        const string tableLayoutPath =
-            @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\Табель Шаблон.xlsx";
+        static string tableLayoutPath =
+            @"\\SPBP.mt.rt.ru\Net_Folders\OOKKM_Otchetnost\ОТЧЕТЫ\teleopti\Для табеля\Табель Шаблон.xlsx";
 
         /// <summary>
         /// Путь выходного файла табеля
         /// </summary>
-        private const string outputName =
-            @"C:\Users\vadim.turetskiy\Documents\Табель\Time sheet constructor\Табель Выход.xlsx";
+        public const string outputName =
+            @"\\SPBP.mt.rt.ru\Net_Folders\OOKKM_Otchetnost\ОТЧЕТЫ\teleopti\Для табеля\Табель Выход.xlsx";
 
         /// <summary>
         /// Имя листа Черновик
@@ -53,14 +56,14 @@ namespace Time_Sheet_Constructor.Model
 
 
         /// <summary>
-        /// Начальный день табеля
+        /// Начальный столбец
         /// </summary>
-        private static int firstDay = 3;
-
+        private static int firstDay = MainWindow.FirstDay + 2;
+        
         /// <summary>
-        /// Конечный день табеля
+        /// Конечный столбец
         /// </summary>
-        private static int lastDay = 33;
+        private static int lastDay = MainWindow.LastDay + 2;
 
         /// <summary>
         /// Данные файла шаблона
@@ -149,9 +152,5 @@ namespace Time_Sheet_Constructor.Model
                 wb.SaveAs(new FileInfo(outputName));
             }
         }
-
-
-
-
     }
 }

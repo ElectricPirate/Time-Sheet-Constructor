@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace Time_Sheet_Constructor.Model
@@ -8,7 +9,7 @@ namespace Time_Sheet_Constructor.Model
     /// <summary>
     /// Парсер данных из отчета
     /// </summary>
-    public static class FileParser
+    public static class FileParser 
     {
         /// <summary>
         /// Количество дней в текущем месяце
