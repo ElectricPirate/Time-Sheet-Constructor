@@ -18,6 +18,11 @@ namespace Time_Sheet_Constructor.Model
         public double AllWorkTime { get; set; }
 
         /// <summary>
+        /// Всерхурочное рабочее время
+        /// </summary>
+        public double OverTime { get; set; }
+
+        /// <summary>
         /// Ночное рабочее время
         /// </summary>
         public double NightWorkTime { get; set; }
@@ -51,6 +56,11 @@ namespace Time_Sheet_Constructor.Model
         /// Неявка
         /// </summary>
         public bool Truancy { get; set; }
+
+        /// <summary>
+        /// Отпуск по беременности и родам
+        /// </summary>
+        public bool MaternityLeave { get; set; }
 
         public bool IsCrossing => GetCrossings();
 

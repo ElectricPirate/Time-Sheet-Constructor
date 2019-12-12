@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using OfficeOpenXml;
@@ -21,14 +22,13 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Путь шаблона табеля
         /// </summary>
-        static string tableLayoutPath =
-            @"\\SPBP.mt.rt.ru\Net_Folders\OOKKM_Otchetnost\ОТЧЕТЫ\teleopti\Для табеля\Табель Шаблон.xlsx";
+        static string tableLayoutPath = MainWindow.TableLayoutPath;
 
         /// <summary>
         /// Путь выходного файла табеля
         /// </summary>
-        public const string outputName =
-            @"\\SPBP.mt.rt.ru\Net_Folders\OOKKM_Otchetnost\ОТЧЕТЫ\teleopti\Для табеля\Табель Выход.xlsx";
+        static string outputName => $"{Fi.DirectoryName}\\Табель выход.xlsx";
+            //@"\\SPBP.mt.rt.ru\Net_Folders\OOKKM_Otchetnost\ОТЧЕТЫ\teleopti\Для табеля\Табель Выход.xlsx";
 
         /// <summary>
         /// Имя листа Черновик
@@ -39,9 +39,6 @@ namespace Time_Sheet_Constructor.Model
         /// Номер строки первого ФИО
         /// </summary>
         static int firstFioRow = 2;
-        
-        static int firstEmpoyeeIdRow = firstFioRow;
-        static int firstDayRow = firstFioRow;
 
         /// <summary>
         /// Номер столбца с ФИО
@@ -52,9 +49,7 @@ namespace Time_Sheet_Constructor.Model
         /// Номер столбца с табельными номерами
         /// </summary>
         static int emloyeeIdColumn = fioColumn + 1;
-        static int firstDayColumn = emloyeeIdColumn + 1;
-
-
+        
         /// <summary>
         /// Начальный столбец
         /// </summary>
@@ -90,12 +85,11 @@ namespace Time_Sheet_Constructor.Model
                     }
                     
                     var scheduleDay = 0;
-                    lastDay = firstDay + person.Schedule.Count;
 
                     wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Value = person.GetFullName();
                     wb.Workbook.Worksheets[draftSheetName].Cells[row, emloyeeIdColumn].Value = person.EmployeeId;
                     
-                    for (var column = firstDay; column < lastDay; column++)
+                    for (var column = firstDay; column <= lastDay; column++)
                     {
                         if (person.Schedule[scheduleDay].AllWorkTime != 0)
                         {
@@ -135,7 +129,20 @@ namespace Time_Sheet_Constructor.Model
                             wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "НН";
                         }
 
+                        if (person.Schedule[scheduleDay].MaternityLeave)
+                        {
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "ОЖ";
+                        }
+
                         if (person.Schedule[scheduleDay].DayOff)
+                        {
+                            if (wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value == null)
+                            {
+                                wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value = "В";
+                            }
+                        }
+
+                        if (person.Schedule[scheduleDay].OverTime != 0 && person.Schedule[scheduleDay].AllWorkTime == 0)
                         {
                             if (wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value == null)
                             {
@@ -150,6 +157,7 @@ namespace Time_Sheet_Constructor.Model
                 }
                 
                 wb.SaveAs(new FileInfo(outputName));
+                MessageBox.Show($"Файл сохранен в {ExportDraft.outputName}", "Успешно");
             }
         }
     }

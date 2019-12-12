@@ -26,11 +26,13 @@ namespace Time_Sheet_Constructor.Model
             var persons = GetPersons(file);
             GetAllWorkTime(file, persons);
             GetNightWorkTime(file, persons);
+            GetOverTimes(file, persons);
             GetSickDays(file, persons);
             GetVacationDays(file, persons);
             GetUnpaidLeaves(file, persons);
             GetEducationalLeaves(file, persons);
             GetTruancys(file, persons);
+            GetMaternityes(file, persons);
             GetDaysOff(file, persons);
 
             return persons;
@@ -166,6 +168,49 @@ namespace Time_Sheet_Constructor.Model
                             }
 
                             dayNumber++;
+                        }
+                    }
+                }
+            }
+
+            return persons;
+        }
+
+        /// <summary>
+        /// Получение сверхурочных часов
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="persons"></param>
+        /// <returns></returns>
+        public static List<Person> GetOverTimes(ExcelPackage file, List<Person> persons)
+        {
+            const string sheet = "Овертаймы";
+            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
+            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstDayColumn = 2;
+            var lastDayColumn = DaysCount + 1;
+
+            foreach (var person in persons)
+            {
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    {
+                        for (var column = firstDayColumn; column <= lastDayColumn; column++)
+                        {
+                            var dayIndex = column - 2;
+                            var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
+
+                            if (current == null)
+                            {
+                                person.Schedule[dayIndex].OverTime = 0;
+                            }
+                            else
+                            {
+                                person.Schedule[dayIndex].OverTime = Convert.ToDouble(current);
+                            }
+
+                            dayIndex++;
                         }
                     }
                 }
@@ -467,6 +512,49 @@ namespace Time_Sheet_Constructor.Model
                             else
                             {
                                 person.Schedule[dayIndex].DayOff = true;
+                            }
+
+                            dayIndex++;
+                        }
+                    }
+                }
+            }
+
+            return persons;
+        }
+
+        /// <summary>
+        /// Получение отсутствий по беременности и родам
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="persons"></param>
+        /// <returns></returns>
+        private static List<Person> GetMaternityes(ExcelPackage file, List<Person> persons)
+        {
+            const string sheet = "Декрет";
+            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
+            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstDayColumn = 2;
+            var lastDayColumn = DaysCount + 1;
+
+            foreach (var person in persons)
+            {
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    {
+                        for (var column = firstDayColumn; column <= lastDayColumn; column++)
+                        {
+                            var dayIndex = column - 2;
+                            var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
+
+                            if (current == null)
+                            {
+                                person.Schedule[dayIndex].MaternityLeave = false;
+                            }
+                            else
+                            {
+                                person.Schedule[dayIndex].MaternityLeave = true;
                             }
 
                             dayIndex++;

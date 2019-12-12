@@ -24,6 +24,14 @@
             </StackPanel>
         </StackPanel>
 
+        <StackPanel Orientation="Vertical" Height="60">
+            <TextBlock><Run Text="Файл шаблона табеля"/></TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name = "TextBox_TableLayoutPath" IsReadOnly="True" Width="300" Height="20" Margin="5,5,5,5"/>
+                <Button x:Name="Button_TableLayoutPath" Content="Выбрать файл" Click="TableLayoutPath_Click" Height="25" Width="90"/>
+            </StackPanel>
+        </StackPanel>
+
         <StackPanel Orientation="Horizontal" Height="80">
             <TextBlock Text="С:" Width="20" Margin="10,30,0,0"/>
             <TextBox x:Name = "TextBox_FirstDay" TextChanged="TextBox_FirstDay_OnTextChanged" Width="20" Height="20" />

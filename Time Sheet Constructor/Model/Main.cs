@@ -23,7 +23,6 @@ namespace Time_Sheet_Constructor.Model
 
             ExportDraft.Write(Persons);
 
-            MessageBox.Show($"Готово. /nФайл сохранен в {ExportDraft.outputName}", "Успешно");
         }
     }
 }
