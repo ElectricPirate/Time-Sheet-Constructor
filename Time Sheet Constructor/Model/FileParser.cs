@@ -1,59 +1,50 @@
 ﻿using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace Time_Sheet_Constructor.Model
 {
     /// <summary>
     /// Парсер данных из отчета
     /// </summary>
-    public static class FileParser 
+    public class FileParser 
     {
         /// <summary>
         /// Количество дней в текущем месяце
         /// </summary>
-        public static int DaysCount => DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month);
+        private int daysCount;
+
+        private ExcelPackage file;
+
+        private List<Person> persons;       
+
+        public FileParser(ExcelPackage excelReport)
+        {
+            file = excelReport;
+            persons = GetPersons();
+            daysCount = DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month);
+        }
 
         /// <summary>
         /// Парсер
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static List<Person> GetData(ExcelPackage file)
-        {
-            var persons = GetPersons(file);
-            GetAllWorkTime(file, persons);
-            GetNightWorkTime(file, persons);
-            GetOverTimes(file, persons);
-            GetSickDays(file, persons);
-            GetVacationDays(file, persons);
-            GetUnpaidLeaves(file, persons);
-            GetEducationalLeaves(file, persons);
-            GetTruancys(file, persons);
-            GetMaternityes(file, persons);
-            GetDaysOff(file, persons);
+        public List<Person> GetData()
+        {     
+            GetAllWorkTime();
+            GetNightWorkTime();
+            GetOverTimes();
+            GetSickDays();
+            GetVacationDays();
+            GetUnpaidLeaves();
+            GetEducationalLeaves();
+            GetTruancys();
+            GetMaternityes();
+            GetDaysOff();
 
             return persons;
 
-        }
-
-        /// <summary>
-        /// Получение списка листов
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        public static List<string> GetSheetsList(ExcelPackage file)
-        {
-            var sheets = new List<string>();
-
-            foreach (var sheet in file.Workbook.Worksheets)
-            {
-                sheets.Add(sheet.Name);
-            }
-
-            return sheets;
         }
 
         /// <summary>
@@ -62,49 +53,77 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="sheetName"></param>
         /// <returns></returns>
-        public static int GetPersonCellRow(ExcelPackage file, string sheetName)
+        private int GetPersonCellRow(string sheetName)
         {
             const string searchWord = "Person";
             var getPersonalCellRow = 0;
 
             var sheet = file.Workbook.Worksheets[sheetName];
-
-            for (var rowIndex = 1; rowIndex < 50; rowIndex++)
-            {
-                if (sheet.Cells[rowIndex, 1].Value == null)
+            
+                for (var rowIndex = 1; rowIndex < 50; rowIndex++)
                 {
-                    continue;
-                }
+                    if (sheet.Cells[rowIndex, 1].Value == null)
+                    {
+                        continue;
+                    }
 
-                if (sheet.Cells[rowIndex, 1].Value.Equals(searchWord))
-                {
-                    getPersonalCellRow = rowIndex;
-                    break;
+                    if (sheet.Cells[rowIndex, 1].Value.Equals(searchWord))
+                    {
+                        getPersonalCellRow = rowIndex;
+                        break;
+                    }
                 }
-            }
+            
 
             return getPersonalCellRow;
         }
+
+
+        //private int GetPersonCellRow(string sheetName)
+        //{
+        //    const string searchWord = "Person";
+        //    var getPersonalCellRow = 0;
+
+        //    using (var sheet = file.Workbook.Worksheets[sheetName])
+        //    {
+        //        for (var rowIndex = 1; rowIndex < 50; rowIndex++)
+        //        {
+        //            if (sheet.Cells[rowIndex, 1].Value == null)
+        //            {
+        //                continue;
+        //            }
+
+        //            if (sheet.Cells[rowIndex, 1].Value.Equals(searchWord))
+        //            {
+        //                getPersonalCellRow = rowIndex;
+        //                break;
+        //            }
+        //        }
+        //    }
+
+        //    return getPersonalCellRow;
+        //}
 
         /// <summary>
         /// Последеняя строка с фио
         /// </summary>
         /// <param name="file"></param>
-        /// <param name="sheetName"></param>
-        /// <returns></returns>
-        public static int GetLastRowNumber(ExcelPackage file, string sheetName)
+        /// <param name="sheetName"></param>        
+        private int GetLastRowNumber(string sheetName)
         {
-            var currentRow = GetPersonCellRow(file, sheetName);
+            var currentRow = GetPersonCellRow(sheetName);
 
-            while (!file.Workbook.Worksheets[sheetName].Cells[currentRow, 1].Value.Equals(null))
-            {
-                currentRow++;
-
-                if (file.Workbook.Worksheets[sheetName].Cells[currentRow + 1, 1].Value == null)
+            var sheet = file.Workbook.Worksheets[sheetName];
+            
+                while (!sheet.Cells[currentRow, 1].Value.Equals(null))
                 {
-                    break;
-                }
-            }
+                    currentRow++;
+
+                    if (sheet.Cells[currentRow + 1, 1].Value == null)
+                    {
+                        break;
+                    }
+                }            
 
             return currentRow;
         }
@@ -114,21 +133,22 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public static List<Person> GetPersons(ExcelPackage file)
+        private List<Person> GetPersons()
         {
-            const string sheet = "Всего";
+            const string sheetName = "Всего";
             var persons = new List<Person>();
+            var firstFioLine = GetPersonCellRow(sheetName) + 1;
+            var lastLineFio = GetLastRowNumber(sheetName);
 
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
-
-            for (var row = firstFioLine; row <= lastLineFio; row++)
-            {
-                var names = file.Workbook.Worksheets[sheet].Cells[row, 1].Value.ToString().Split(' ');
-                var lastName = names[0];
-                var firstName = names[1];
-                persons.Add(new Person() { FirstName = firstName, LastName = lastName });
-            }
+            var sheet = file.Workbook.Worksheets[sheetName];
+                           
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    var names = sheet.Cells[row, 1].Value.ToString().Split(' ');
+                    var lastName = names[0];
+                    var firstName = names[1];
+                    persons.Add(new Person() { FirstName = firstName, LastName = lastName });
+                }            
 
             return persons;
         }
@@ -139,13 +159,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        public static List<Person> GetAllWorkTime(ExcelPackage file, List<Person> persons)
+        private void GetAllWorkTime()
         {
             const string sheet = "Всего";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -171,9 +191,7 @@ namespace Time_Sheet_Constructor.Model
                         }
                     }
                 }
-            }
-
-            return persons;
+            }            
         }
 
         /// <summary>
@@ -182,13 +200,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        public static List<Person> GetOverTimes(ExcelPackage file, List<Person> persons)
+        private void GetOverTimes()
         {
             const string sheet = "Овертаймы";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -214,9 +232,7 @@ namespace Time_Sheet_Constructor.Model
                         }
                     }
                 }
-            }
-
-            return persons;
+            }            
         }
 
         /// <summary>
@@ -225,13 +241,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        public static List<Person> GetNightWorkTime(ExcelPackage file, List<Person> persons)
+        private void GetNightWorkTime()
         {
             const string sheet = "Ночные";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -257,13 +273,8 @@ namespace Time_Sheet_Constructor.Model
                         }
                     }
                 }
-            }
-
-            return persons;
-        }
-
-
-        /// TODO: оптимизировать методы ниже, они ужасные
+            }            
+        }                       
 
         /// <summary>
         /// Получение больничных
@@ -271,13 +282,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        private static List<Person> GetSickDays(ExcelPackage file, List<Person> persons)
+        private void GetSickDays()
         {
             const string sheet = "Больничные";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -303,9 +314,7 @@ namespace Time_Sheet_Constructor.Model
                         }
                     }
                 }
-            }
-
-            return persons;
+            }            
         }
 
         /// <summary>
@@ -314,13 +323,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        private static List<Person> GetVacationDays(ExcelPackage file, List<Person> persons)
+        private void GetVacationDays()
         {
             const string sheet = "Отпуск";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -346,9 +355,7 @@ namespace Time_Sheet_Constructor.Model
                         }
                     }
                 }
-            }
-
-            return persons;
+            }            
         }
 
         /// <summary>
@@ -357,13 +364,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        private static List<Person> GetUnpaidLeaves(ExcelPackage file, List<Person> persons)
+        private void GetUnpaidLeaves()
         {
             const string sheet = "Неоп_Отпуск";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -389,9 +396,7 @@ namespace Time_Sheet_Constructor.Model
                         }
                     }
                 }
-            }
-
-            return persons;
+            }            
         }
 
         /// <summary>
@@ -400,13 +405,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        private static List<Person> GetEducationalLeaves(ExcelPackage file, List<Person> persons)
+        private void GetEducationalLeaves()
         {
             const string sheet = "Учен_Отпуск";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -433,8 +438,6 @@ namespace Time_Sheet_Constructor.Model
                     }
                 }
             }
-
-            return persons;
         }
 
         /// <summary>
@@ -443,13 +446,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        private static List<Person> GetTruancys(ExcelPackage file, List<Person> persons)
+        private void GetTruancys()
         {
             const string sheet = "Прогул";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -476,8 +479,6 @@ namespace Time_Sheet_Constructor.Model
                     }
                 }
             }
-
-            return persons;
         }
 
         /// <summary>
@@ -486,13 +487,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        private static List<Person> GetDaysOff(ExcelPackage file, List<Person> persons)
+        private void GetDaysOff()
         {
             const string sheet = "Выходные";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -519,8 +520,6 @@ namespace Time_Sheet_Constructor.Model
                     }
                 }
             }
-
-            return persons;
         }
 
         /// <summary>
@@ -529,13 +528,13 @@ namespace Time_Sheet_Constructor.Model
         /// <param name="file"></param>
         /// <param name="persons"></param>
         /// <returns></returns>
-        private static List<Person> GetMaternityes(ExcelPackage file, List<Person> persons)
+        private void GetMaternityes()
         {
             const string sheet = "Декрет";
-            var firstFioLine = GetPersonCellRow(file, sheet) + 1;
-            var lastLineFio = GetLastRowNumber(file, sheet);
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
-            var lastDayColumn = DaysCount + 1;
+            var lastDayColumn = daysCount + 1;
 
             foreach (var person in persons)
             {
@@ -562,8 +561,6 @@ namespace Time_Sheet_Constructor.Model
                     }
                 }
             }
-
-            return persons;
         }
 
     }

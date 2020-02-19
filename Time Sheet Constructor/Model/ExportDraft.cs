@@ -22,13 +22,12 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Путь шаблона табеля
         /// </summary>
-        static string tableLayoutPath = MainWindow.TableLayoutPath;
-
+        public static string TableLayoutPath { get; set; }
+       
         /// <summary>
         /// Путь выходного файла табеля
         /// </summary>
-        static string outputName => $"{Fi.DirectoryName}\\Табель выход.xlsx";
-            //@"\\SPBP.mt.rt.ru\Net_Folders\OOKKM_Otchetnost\ОТЧЕТЫ\teleopti\Для табеля\Табель Выход.xlsx";
+        static string outputName => $"{Fi.DirectoryName}\\Табель выход.xlsx";            
 
         /// <summary>
         /// Имя листа Черновик
@@ -53,17 +52,17 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Начальный столбец
         /// </summary>
-        private static int firstDay = MainWindow.FirstDay + 2;
+        private static int firstDay = ViewModel.FirstDay + 2;
         
         /// <summary>
         /// Конечный столбец
         /// </summary>
-        private static int lastDay = MainWindow.LastDay + 2;
+        private static int lastDay = ViewModel.LastDay + 2;
 
         /// <summary>
         /// Данные файла шаблона
         /// </summary>
-        static FileInfo Fi => new FileInfo(tableLayoutPath);
+        static FileInfo Fi => new FileInfo(TableLayoutPath);
 
         static ExcelPackage Excel => new ExcelPackage(Fi);
 

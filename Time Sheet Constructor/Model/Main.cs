@@ -1,27 +1,28 @@
-﻿using System;
+﻿using OfficeOpenXml;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using OfficeOpenXml;
+
 
 namespace Time_Sheet_Constructor.Model
 {
-    public class Main
+    public static class Main
     {
+        public static string TeleoptiReportPath { get; set; }             
+    
         public static void Start()
-        {
-            var existingFile = new FileInfo(MainWindow.TeleoptiReportPath);
+        {     
+            var existingFile = new FileInfo(TeleoptiReportPath);
+            
             var table = new ExcelPackage(existingFile);
 
+            var Persons = new List<Person>();
+            var data = new FileParser(table);
+            Persons = data.GetData();               
+            var ParseIDs = new EmpoyeeIDParser(Persons);
+            var PeronsWithIDs = ParseIDs.Parse(Persons);
             
-            var Persons = FileParser.GetData(table);
 
-            Persons = EmpoyeeIDParser.Parse(Persons);
-
-            ExportDraft.Write(Persons);
+            ExportDraft.Write(PeronsWithIDs);
 
         }
     }

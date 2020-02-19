@@ -5,43 +5,85 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Time_Sheet_Constructor"
         mc:Ignorable="d"
-        Title="Конструктор табеля" Height="360" Width="640">
-    <StackPanel Margin="10,10,10,10" Orientation="Vertical">
-
-        <StackPanel Orientation="Vertical" Height="60">
-            <TextBlock><Run Text="Отчет ТабельСПБ из Teleopti Perfomance Manager"/></TextBlock>
+        Title="Конструктор табеля" Height="360" Width="640" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style TargetType="StackPanel">
+            <Setter Property="Margin" Value="5,5,5,5"/>            
+        </Style>
+        <Style x:Key="LongTextBox">
+            <Setter Property="Control.Width" Value="300"/>
+            <Setter Property="Control.Margin" Value="5,5,5,5"/>            
+        </Style>
+        <Style x:Key="ShortTextBox">
+            <Setter Property="Control.Width" Value="20"/>
+            <Setter Property="Control.Height" Value="20"/>
+            <Setter Property="Control.Margin" Value="5,5,5,5"/>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5,5,5,5"/>
+        </Style>
+        <Style x:Key="FileButton"/>
+    </Window.Resources>
+    
+    <Grid ShowGridLines="True">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>          
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Row="0" >
+            <TextBlock Text="Отчет ТабельСПБ из Teleopti Perfomance Manager"/>
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name = "TextBox_TeleoptiReportPath" IsReadOnly="True" Width="300" Height="20" Margin="5,5,5,5"/>
-                <Button x:Name="Button_SelectTeleoptiReportPath" Content="Выбрать файл" Click="TeleoptiReportPath_Click" Height="25" Width="90"/>
+                <TextBox Text="{Binding TeleoptiReportPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource LongTextBox}" IsReadOnly="True"/>
+                <Button Content="Выбрать файл" Command="{Binding OpenTeleoptiReportPathCommand}"/>
             </StackPanel>
         </StackPanel>
-
-        <StackPanel Orientation="Vertical" Height="60">
-            <TextBlock><Run Text="Файл со списком сотрудников ОО"/></TextBlock>
+        
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Файл со списком сотрудников ОО"/>
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name = "TextBox_EmployeeFilePath" IsReadOnly="True" Width="300" Height="20" Margin="5,5,5,5"/>
-                <Button x:Name="Button_SelectEmployeeFilePath" Content="Выбрать файл" Click="EmployeeFilePath_Click" Height="25" Width="90"/>
+                <TextBox Text="{Binding EmployeeFilePath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource LongTextBox}" IsReadOnly="True"/>
+                <Button Content="Выбрать файл" Command="{Binding OpenEmployeeFilePathCommand}"/>
             </StackPanel>
         </StackPanel>
-
-        <StackPanel Orientation="Vertical" Height="60">
-            <TextBlock><Run Text="Файл шаблона табеля"/></TextBlock>
+        
+        <StackPanel Grid.Row="2">
+            <TextBlock Text="Файл шаблона табеля"/>
             <StackPanel Orientation="Horizontal">
-                <TextBox x:Name = "TextBox_TableLayoutPath" IsReadOnly="True" Width="300" Height="20" Margin="5,5,5,5"/>
-                <Button x:Name="Button_TableLayoutPath" Content="Выбрать файл" Click="TableLayoutPath_Click" Height="25" Width="90"/>
+                <TextBox Text="{Binding TableLayoutPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource LongTextBox}" IsReadOnly="True"/>
+                <Button Content="Выбрать файл" Command="{Binding OpenTableLayoutPathCommand}"/>
             </StackPanel>
         </StackPanel>
-
-        <StackPanel Orientation="Horizontal" Height="80">
-            <TextBlock Text="С:" Width="20" Margin="10,30,0,0"/>
-            <TextBox x:Name = "TextBox_FirstDay" TextChanged="TextBox_FirstDay_OnTextChanged" Width="20" Height="20" />
-            <TextBlock Text="По:" Margin="10,30,0,0" Width="24"/>
-            <TextBox x:Name = "TextBox_LastDay" TextChanged="TextBox_LastDay_OnTextChanged" Width="20" Height="20" />
-            <Button x:Name="Button_Start" Content="Начать" Click="Start_Click" Height="30" Width="100" Margin="20"/>
+        
+        <StackPanel Grid.Row="3">
+            <TextBlock Text="Даты для табеля"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                    <TextBlock Text="С:"/>
+                    <TextBox Text="{Binding FirstDay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShortTextBox}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                    <TextBlock Text="По:"/>
+                    <TextBox Text="{Binding LastDay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShortTextBox}"/>
+                </StackPanel>
+                <Button Content="Начать" Command="{Binding StartCommand}" Grid.Column="2"/>
+            </Grid>
         </StackPanel>
-
-
-
-    </StackPanel>
+        
+    </Grid>
 
 </Window>
