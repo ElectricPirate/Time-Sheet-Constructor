@@ -22,12 +22,12 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Путь шаблона табеля
         /// </summary>
-        public static string TableLayoutPath { get; set; }
+        string tableLayoutPath;
        
         /// <summary>
         /// Путь выходного файла табеля
         /// </summary>
-        static string outputName => $"{Fi.DirectoryName}\\Табель выход.xlsx";            
+        string outputName;            
 
         /// <summary>
         /// Имя листа Черновик
@@ -37,42 +37,58 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Номер строки первого ФИО
         /// </summary>
-        static int firstFioRow = 2;
+        int firstFioRow;
 
         /// <summary>
         /// Номер столбца с ФИО
         /// </summary>
-        static int fioColumn = 1;
+        int fioColumn;
 
         /// <summary>
         /// Номер столбца с табельными номерами
         /// </summary>
-        static int emloyeeIdColumn = fioColumn + 1;
+        int emloyeeIdColumn;
         
         /// <summary>
         /// Начальный столбец
         /// </summary>
-        private static int firstDay = ViewModel.FirstDay + 2;
-        
+        int firstDay;
+
         /// <summary>
         /// Конечный столбец
-        /// </summary>
-        private static int lastDay = ViewModel.LastDay + 2;
+        /// </summary>        
+        int lastDay;
 
         /// <summary>
         /// Данные файла шаблона
         /// </summary>
-        static FileInfo Fi => new FileInfo(TableLayoutPath);
+        FileInfo fi;
 
-        static ExcelPackage Excel => new ExcelPackage(Fi);
+        ExcelPackage excel;
+
+        List<Person> persons;
+
+        public ExportDraft(string tableLayoutPath, List<Person> persons,int firstDay,int lastDay)
+        {
+            this.tableLayoutPath = tableLayoutPath;
+            fi = new FileInfo(tableLayoutPath);
+            excel = new ExcelPackage(fi);
+            fioColumn = 1;
+            firstFioRow = 2;
+            emloyeeIdColumn = fioColumn + 1;
+            this.firstDay = firstDay + 2;
+            this.lastDay = lastDay + 2;            
+            this.persons = persons;
+            outputName = $"{fi.DirectoryName}\\Табель выход.xlsx";
+        }
 
         /// <summary>
         /// Пишем данные в файл
         /// </summary>
         /// <param name="persons"></param>
-        public static void Write(List<Person> persons)
+        public void Write()
         {
-            using (var wb = Excel)
+            using (var wb = excel)
             {
                 var row = firstFioRow;
 
@@ -156,7 +172,7 @@ namespace Time_Sheet_Constructor.Model
                 }
                 
                 wb.SaveAs(new FileInfo(outputName));
-                MessageBox.Show($"Файл сохранен в {ExportDraft.outputName}", "Успешно");
+                MessageBox.Show($"Файл сохранен в {outputName}", "Успешно");
             }
         }
     }

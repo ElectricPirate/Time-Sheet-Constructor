@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Time_Sheet_Constructor.Model
 {
@@ -30,7 +31,7 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Расписание
         /// </summary>
-        public List<Day> Schedule { get; set; }
+        public List<Day> Schedule { get; set; }        
 
         public Person()
         {

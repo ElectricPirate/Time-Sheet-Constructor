@@ -16,14 +16,14 @@ namespace Time_Sheet_Constructor.Model
         ///// <summary>
         ///// Путь к .xls файлу со списком сотрудников
         ///// </summary>
-        public static string EmployeeFilePath_xls { get; set; }
+        public string EmployeeFilePath_xls { get; set; }
 
         /// <summary>
         /// Путь к .xlsx файлу со списком сотрудников
         /// </summary>
         private string employeeFilePath_xlsx;
 
-        public List<Person> Persons { get; set; }
+        List<Person> persons;
 
         /// <summary>
         /// Данные файла
@@ -52,10 +52,10 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         private (int row, int column) employeeCellAddress;
 
-        public EmpoyeeIDParser(List<Person> persons)
+        public EmpoyeeIDParser(List<Person> persons, string _employeeFilePath_xls)
         {
-            //EmployeeFilePath_xls = employeeFilePath_xls;
-            Persons = persons;
+            EmployeeFilePath_xls = _employeeFilePath_xls;
+            this.persons = persons;
             FI = GetFI(EmployeeFilePath_xls);
             excel = new ExcelPackage(FI);
             employeeCellAddress = GetEmployeeCellAddress();
@@ -102,7 +102,7 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         /// <param name="persons"></param>
         /// <returns></returns>
-        public List<Person> Parse(List<Person> persons)
+        public List<Person> Parse()
         {
             var personsWithId = GetPersons();
 

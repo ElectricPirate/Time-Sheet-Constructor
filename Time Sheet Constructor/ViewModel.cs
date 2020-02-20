@@ -9,47 +9,112 @@ using Time_Sheet_Constructor.Model;
 
 namespace Time_Sheet_Constructor
 {
-    public class ViewModel : INotifyPropertyChanged
+    public class ViewModel : INotifyPropertyChanged, IDataErrorInfo
     {
-        private string _employeeFilePath;
+        private string employeeFilePath;
         public string EmployeeFilePath
         {
-            get { return _employeeFilePath; }
+            get => employeeFilePath; 
             set 
             { 
-                _employeeFilePath = value;                
+                employeeFilePath = value;
+                if (String.IsNullOrWhiteSpace(employeeFilePath))
+                {
+                    errors["EmployeeFilePath"] = "Адрес не может быть пустым";
+                }
+                else
+                {
+                    errors["EmployeeFilePath"] = null;
+                }
             }
         }
         
-        private string _teleoptiReportPath;
+        private string teleoptiReportPath;
         public string TeleoptiReportPath
         {
-            get { return _teleoptiReportPath; }
+            get { return teleoptiReportPath; }
             set 
             {
-                _teleoptiReportPath = value;                
+                teleoptiReportPath = value;
+                if (String.IsNullOrWhiteSpace(teleoptiReportPath))
+                {
+                    errors["TeleoptiReportPath"] = "Адрес не может быть пустым";
+                }
+                else
+                {
+                    errors["TeleoptiReportPath"] = null;
+                }
             }
         }
 
-        private string _tableLayoutPath;
+        private string tableLayoutPath;
         public string TableLayoutPath
         {
-            get { return _tableLayoutPath; }
+            get => tableLayoutPath;
             set 
             { 
-                _tableLayoutPath = value;                
+                tableLayoutPath = value;                
+                if (String.IsNullOrWhiteSpace(tableLayoutPath))
+                {
+                    errors["TableLayoutPath"] = "Адрес не может быть пустым";
+                }
+                else
+                {
+                    errors["TableLayoutPath"] = null;
+                }
             }
         }
 
-        public static int FirstDay { get; set; }
+        private int firstDay;
+        public int FirstDay
+        {
+            get => firstDay;            
+            set
+            {
+                firstDay = value;
+                OnPropertyChanged("FirstDay");
+                Main.FirstDay = firstDay;
+                if (value <= 0 || value > 31 || value.ToString()==null)
+                {
+                    errors["FirstDay"] = "Некорректный день";
+                }
+                else
+                {
+                    errors["FirstDay"] = null;
+                }
+            }
+        }
 
-        public static int LastDay { get; set; }
+        private int lastDay;
+        public int LastDay
+        {
+            get => lastDay;
+            set
+            {
+                lastDay = value;
+                OnPropertyChanged("LastDay");
+                Main.LastDay = lastDay;
+                if (value > 0 && value <= 31)
+                {                    
+                    errors["LastDay"] = null;
+                }
+                else
+                {
+                    errors["LastDay"] = "Некорректный день";
+                }
+            }
+        }
+
+        Dictionary<string, string> errors;
+
+        public bool IsValid => !errors.Values.Any(x => x != null);
 
         IDialogService dialogService;
 
         public ViewModel(IDialogService dialogService)
         {
             this.dialogService = dialogService;
+            errors = new Dictionary<string, string>();
         }
 
         private RelayCommand openTeleoptiReportPathCommand;
@@ -61,9 +126,9 @@ namespace Time_Sheet_Constructor
                   (openTeleoptiReportPathCommand = new RelayCommand(obj =>
                   {                      
                       this.dialogService.OpenFileDialog();
-                      _teleoptiReportPath = dialogService.FilePath;
+                      teleoptiReportPath = dialogService.FilePath;
                       OnPropertyChanged("TeleoptiReportPath");
-                      Main.TeleoptiReportPath = _teleoptiReportPath;
+                      Main.TeleoptiReportPath = teleoptiReportPath;
                   }));
             }
         }
@@ -77,9 +142,9 @@ namespace Time_Sheet_Constructor
                   (openEmployeeFilePathCommand = new RelayCommand(obj =>
                   {
                       this.dialogService.OpenFileDialog();
-                      _employeeFilePath = dialogService.FilePath;
+                      employeeFilePath = dialogService.FilePath;
                       OnPropertyChanged("EmployeeFilePath");
-                      EmpoyeeIDParser.EmployeeFilePath_xls = _employeeFilePath;
+                      Main.EmployeeFilePath = employeeFilePath;
                   }));
             }
         }
@@ -93,9 +158,9 @@ namespace Time_Sheet_Constructor
                   (openTableLayoutPathCommand = new RelayCommand(obj =>
                   {
                       this.dialogService.OpenFileDialog();
-                      _tableLayoutPath = dialogService.FilePath;
+                      tableLayoutPath = dialogService.FilePath;
                       OnPropertyChanged("TableLayoutPath");
-                      ExportDraft.TableLayoutPath = _tableLayoutPath;
+                      Main.TableLayoutPath = tableLayoutPath;
                   }));
             }
         }
@@ -108,16 +173,23 @@ namespace Time_Sheet_Constructor
                 return startCommand ??
                   (startCommand = new RelayCommand(obj =>
                   {
-                      Main.Start();
+                      if (IsValid)
+                      {
+                          Main.Start();
+                      }
                   }));
             }
-        }
+        }        
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName]string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }        
+        }
+
+        public string Error => throw new NotImplementedException();
+
+        public string this[string columnName] => errors.ContainsKey(columnName) ? errors[columnName] : null;
     }
 }

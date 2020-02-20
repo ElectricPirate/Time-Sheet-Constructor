@@ -12,11 +12,11 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Количество дней в текущем месяце
         /// </summary>
-        private int daysCount;
+        int daysCount;
 
-        private ExcelPackage file;
+        ExcelPackage file;
 
-        private List<Person> persons;       
+        List<Person> persons;       
 
         public FileParser(ExcelPackage excelReport)
         {

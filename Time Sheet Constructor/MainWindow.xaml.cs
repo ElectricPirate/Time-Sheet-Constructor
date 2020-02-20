@@ -25,8 +25,7 @@ namespace Time_Sheet_Constructor
         {
             InitializeComponent();
             DataContext = new ViewModel(new DefaultDialogService());
-        }
-
+        }    
 
         //private void TeleoptiReportPath_Click(object sender, RoutedEventArgs e)
         //{

@@ -6,26 +6,42 @@
         xmlns:local="clr-namespace:Time_Sheet_Constructor"
         mc:Ignorable="d"
         Title="Конструктор табеля" Height="360" Width="640" WindowStartupLocation="CenterScreen">
-    <Window.Resources>
+    <Window.Resources>       
         <Style TargetType="StackPanel">
             <Setter Property="Margin" Value="5,5,5,5"/>            
         </Style>
-        <Style x:Key="LongTextBox">
+        <Style TargetType="TextBox" x:Key="LongTextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=(Validation.Errors)[0].ErrorContent}" />
+                    <Setter Property="Foreground" Value="Red" />
+                </Trigger>
+            </Style.Triggers>
             <Setter Property="Control.Width" Value="300"/>
-            <Setter Property="Control.Margin" Value="5,5,5,5"/>            
+            <Setter Property="Control.Margin" Value="5,5,5,5"/>
         </Style>
-        <Style x:Key="ShortTextBox">
+        <Style TargetType="TextBox" x:Key="ShortTextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="True">
+                    <Setter Property="ToolTip"
+                        Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=(Validation.Errors)[0].ErrorContent}" />
+                    <Setter Property="Foreground" Value="Red" />
+                </Trigger>
+            </Style.Triggers>
             <Setter Property="Control.Width" Value="20"/>
             <Setter Property="Control.Height" Value="20"/>
             <Setter Property="Control.Margin" Value="5,5,5,5"/>
         </Style>
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="5,5,5,5"/>
-        </Style>
-        <Style x:Key="FileButton"/>
+        </Style>       
+        
     </Window.Resources>
     
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -39,28 +55,49 @@
         
         <StackPanel Grid.Row="0" >
             <TextBlock Text="Отчет ТабельСПБ из Teleopti Perfomance Manager"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding TeleoptiReportPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource LongTextBox}" IsReadOnly="True"/>
+            <StackPanel Orientation="Horizontal">                
+                <TextBox Style="{StaticResource LongTextBox}" IsReadOnly="True">
+                    <TextBox.Text>
+                        <Binding Path="TeleoptiReportPath" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
                 <Button Content="Выбрать файл" Command="{Binding OpenTeleoptiReportPathCommand}"/>
             </StackPanel>
-        </StackPanel>
-        
+        </StackPanel>        
         <StackPanel Grid.Row="1">
             <TextBlock Text="Файл со списком сотрудников ОО"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding EmployeeFilePath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource LongTextBox}" IsReadOnly="True"/>
+            <StackPanel Orientation="Horizontal">                
+                <TextBox Style="{StaticResource LongTextBox}" IsReadOnly="True">
+                    <TextBox.Text>
+                        <Binding Path="EmployeeFilePath" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
                 <Button Content="Выбрать файл" Command="{Binding OpenEmployeeFilePathCommand}"/>
             </StackPanel>
-        </StackPanel>
-        
+        </StackPanel>        
         <StackPanel Grid.Row="2">
             <TextBlock Text="Файл шаблона табеля"/>
-            <StackPanel Orientation="Horizontal">
-                <TextBox Text="{Binding TableLayoutPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource LongTextBox}" IsReadOnly="True"/>
+            <StackPanel Orientation="Horizontal">                
+                <TextBox Style="{StaticResource LongTextBox}" IsReadOnly="True">
+                    <TextBox.Text>
+                        <Binding Path="TableLayoutPath" UpdateSourceTrigger="PropertyChanged">
+                            <Binding.ValidationRules>
+                                <DataErrorValidationRule />
+                            </Binding.ValidationRules>
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
                 <Button Content="Выбрать файл" Command="{Binding OpenTableLayoutPathCommand}"/>
             </StackPanel>
-        </StackPanel>
-        
+        </StackPanel>        
         <StackPanel Grid.Row="3">
             <TextBlock Text="Даты для табеля"/>
             <Grid>
@@ -71,14 +108,30 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions>                
                 <StackPanel Orientation="Horizontal" Grid.Column="0">
                     <TextBlock Text="С:"/>
-                    <TextBox Text="{Binding FirstDay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShortTextBox}"/>
+                    <TextBox Style="{StaticResource ShortTextBox}">
+                        <TextBox.Text>
+                            <Binding Path="FirstDay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule />
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>                    
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Column="1">
                     <TextBlock Text="По:"/>
-                    <TextBox Text="{Binding LastDay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ShortTextBox}"/>
+                    <TextBox Style="{StaticResource ShortTextBox}">
+                        <TextBox.Text>
+                            <Binding Path="LastDay" UpdateSourceTrigger="PropertyChanged">
+                                <Binding.ValidationRules>
+                                    <DataErrorValidationRule/>
+                                </Binding.ValidationRules>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
                 </StackPanel>
                 <Button Content="Начать" Command="{Binding StartCommand}" Grid.Column="2"/>
             </Grid>
