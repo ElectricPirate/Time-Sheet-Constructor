@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace Time_Sheet_Constructor.Model
 {
@@ -62,11 +63,21 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         public bool MaternityLeave { get; set; }
 
-        public bool IsCrossing => GetCrossings();
+        /// <summary>
+        /// Запланирован ли день
+        /// </summary>
+        public bool ScheduledDay => IsScheduledDay();
+
+        private bool IsScheduledDay()
+        {
+            return AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave;
+        }
+
+        public bool Crossing => GetCrossings();       
 
         private bool GetCrossings()
         {
-            return AllWorkTime != 0 && SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy;
+            return AllWorkTime != default && (SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave);
         }
 
     }

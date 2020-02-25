@@ -1,0 +1,22 @@
+﻿<Window x:Class="Time_Sheet_Constructor.AboutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Time_Sheet_Constructor"
+        mc:Ignorable="d"
+        Title="О программе" Height="170" Width="350" WindowStartupLocation="CenterScreen" Icon="iconfinder_UI_UX_UIUX_About_4470663.png">
+    <StackPanel Margin="10,10,10,10">
+        <TextBlock HorizontalAlignment="Center">Программа для составления табеля</TextBlock>
+        <TextBlock HorizontalAlignment="Center">учета рабочего времени</TextBlock>
+        <TextBlock/>
+        <TextBlock HorizontalAlignment="Center">Разработка: Турецкий Вадим</TextBlock>
+        <TextBlock/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center" Text="Код доступен на "/>
+            <TextBlock HorizontalAlignment="Center">
+                <Hyperlink RequestNavigate="Hyperlink_RequestNavigate" NavigateUri="https://github.com/ElectricPirate/Time-Sheet-Constructor">GitHub</Hyperlink>
+            </TextBlock>            
+        </StackPanel>
+    </StackPanel>
+</Window>

@@ -60,6 +60,16 @@ namespace Time_Sheet_Constructor.Model
         int lastDay;
 
         /// <summary>
+        /// Количество человек, у которых первый рабочий день раньше даты приема
+        /// </summary>
+        int firstWorkDayErrors;
+
+        /// <summary>
+        /// Количество дней, у которых рабочее время пересекается с отсутствием
+        /// </summary>
+        int worktimeCrossingErrors;
+
+        /// <summary>
         /// Данные файла шаблона
         /// </summary>
         FileInfo fi;
@@ -102,6 +112,15 @@ namespace Time_Sheet_Constructor.Model
                     var scheduleDay = 0;
 
                     wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Value = person.GetFullName();
+
+                    if (person.FirstWorkDay < person.DateOfReceipt.Day && person.DateOfReceipt.Year == DateTime.Now.Year && person.DateOfReceipt.Month == DateTime.Now.Month)
+                    {
+                        wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].
+                            AddComment($"Внимание! Первый рабочий день ({person.FirstWorkDay}) раньше даты приема ({person.DateOfReceipt.Day})", "Автор");
+                        wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Style.Font.Color.SetColor(System.Drawing.Color.Red);
+                        firstWorkDayErrors++;
+                    }
+
                     wb.Workbook.Worksheets[draftSheetName].Cells[row, emloyeeIdColumn].Value = person.EmployeeId;
                     
                     for (var column = firstDay; column <= lastDay; column++)
@@ -165,14 +184,50 @@ namespace Time_Sheet_Constructor.Model
                             }
                         }
 
+                        if (person.Schedule[scheduleDay].Crossing)
+                        {
+                            if (wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Comment == null)
+                            {
+                                wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].
+                            AddComment($"Внимание! Рабочее время пересекается с отсутствием!", "Автор");
+                            }
+                            else
+                            {
+                                wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Comment.Text += "\nРабочее время пересекается с отсутствием!";                            
+                            }
+                            
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Style.Font.Color.SetColor(System.Drawing.Color.Red);
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Style.Font.Color.SetColor(System.Drawing.Color.Red);
+
+                            worktimeCrossingErrors++;
+                        }
+
                         scheduleDay++;
                     }
 
                     row++;
+                }            
+
+                if (firstWorkDayErrors > 0)
+                {
+                    MessageBox.Show($"У {firstWorkDayErrors} операторов первый рабочий день раньше оформления. \nОбращайте внимание на комментарии.", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+
+                if (worktimeCrossingErrors > 0)
+                {
+                    MessageBox.Show($"Обнаружено {worktimeCrossingErrors} случаев пересечения рабочего времени с отсутствием, необходимо перенести часы. \nОбращайте внимание на комментарии.", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                try
+                {
+                    wb.SaveAs(new FileInfo(outputName));
+                    MessageBox.Show($"Файл сохранен в {outputName}", "Успешно!");
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }                
                 
-                wb.SaveAs(new FileInfo(outputName));
-                MessageBox.Show($"Файл сохранен в {outputName}", "Успешно");
             }
         }
     }

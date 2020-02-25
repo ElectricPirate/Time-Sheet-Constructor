@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Time_Sheet_Constructor"
         mc:Ignorable="d"
-        Title="Конструктор табеля" Height="360" Width="640" WindowStartupLocation="CenterScreen">
+        Title="Конструктор табеля" Height="360" Width="450" WindowStartupLocation="CenterScreen" Icon="calendar.png">
     <Window.Resources>       
         <Style TargetType="StackPanel">
             <Setter Property="Margin" Value="5,5,5,5"/>            
@@ -47,16 +47,15 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>          
-            <ColumnDefinition Width="0.5*"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
+        </Grid.RowDefinitions>  
         
-        <StackPanel Grid.Row="0" >
-            <TextBlock Text="Отчет ТабельСПБ из Teleopti Perfomance Manager"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,0">
+            <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Отчет ТабельСПБ из Teleopti Perfomance Manager" Width="388"/>
+                <Button  Content="?" Click="About_Click" Width="25"/>
+            </StackPanel>
             <StackPanel Orientation="Horizontal">                
-                <TextBox Style="{StaticResource LongTextBox}" IsReadOnly="True">
+                <TextBox Style="{StaticResource LongTextBox}" IsReadOnly="True" Width="304">
                     <TextBox.Text>
                         <Binding Path="TeleoptiReportPath" UpdateSourceTrigger="PropertyChanged">
                             <Binding.ValidationRules>
@@ -97,8 +96,8 @@
                 </TextBox>
                 <Button Content="Выбрать файл" Command="{Binding OpenTableLayoutPathCommand}"/>
             </StackPanel>
-        </StackPanel>        
-        <StackPanel Grid.Row="3">
+        </StackPanel>
+        <StackPanel Grid.Row="3" >
             <TextBlock Text="Даты для табеля"/>
             <Grid>
                 <Grid.RowDefinitions>
@@ -108,7 +107,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>                
+                </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal" Grid.Column="0">
                     <TextBlock Text="С:"/>
                     <TextBox Style="{StaticResource ShortTextBox}">
@@ -119,7 +118,7 @@
                                 </Binding.ValidationRules>
                             </Binding>
                         </TextBox.Text>
-                    </TextBox>                    
+                    </TextBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Column="1">
                     <TextBlock Text="По:"/>
@@ -136,7 +135,6 @@
                 <Button Content="Начать" Command="{Binding StartCommand}" Grid.Column="2"/>
             </Grid>
         </StackPanel>
-        
     </Grid>
 
 </Window>

@@ -31,11 +31,36 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Расписание
         /// </summary>
-        public List<Day> Schedule { get; set; }        
+        public List<Day> Schedule { get; set; }
+
+        /// <summary>
+        /// Первый рабочий день
+        /// </summary>
+        public int FirstWorkDay => GetFirstWorkDay();        
+
+        /// <summary>
+        /// Дата приема сотрудника
+        /// </summary>
+        public DateTime DateOfReceipt { get; set; }
 
         public Person()
         {
-            Schedule = new List<Day>();
+            Schedule = new List<Day>();            
+        }
+
+        private int GetFirstWorkDay()
+        {
+            var number = 0;
+            foreach (var day in Schedule)
+            {
+                if (day.ScheduledDay)
+                {
+                    number = day.Number;
+                    break;
+                }
+            }
+
+            return number;
         }
 
         /// <summary>

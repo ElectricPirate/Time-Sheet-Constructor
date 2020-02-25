@@ -40,7 +40,7 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Номер столбца с ФИО
         /// </summary>
-        int firstFIOColumn;
+        private int fioColumn;
 
         /// <summary>
         /// Номер последней строки с ФИО
@@ -51,6 +51,28 @@ namespace Time_Sheet_Constructor.Model
         /// Адрес ячейки заголовка столбца списка сотрудников
         /// </summary>
         private (int row, int column) employeeCellAddress;
+        private string employeeCellText = "Сотрудник";
+
+        /// <summary>
+        /// Номер первой даты приема
+        /// </summary>
+        private int firstDateOfReceiptRow;
+
+        /// <summary>
+        /// Номер столбца с датами приема
+        /// </summary>
+        private int dateOfReceiptColumn;
+
+        /// <summary>
+        /// Номер последней строки даты приема
+        /// </summary>
+        private int lastDateOfReceiptRow;
+
+        /// <summary>
+        /// Адрес ячейки заголовка столбца даты приема
+        /// </summary>
+        private (int row, int column) dateOfReceiptCellAddress;
+        private string dateOfReceiptCellText = "Дата приема";
 
         public EmpoyeeIDParser(List<Person> persons, string _employeeFilePath_xls)
         {
@@ -58,10 +80,14 @@ namespace Time_Sheet_Constructor.Model
             this.persons = persons;
             FI = GetFI(EmployeeFilePath_xls);
             excel = new ExcelPackage(FI);
-            employeeCellAddress = GetEmployeeCellAddress();
+            employeeCellAddress = GetCellAddress(employeeCellText);
+            dateOfReceiptCellAddress = GetCellAddress(dateOfReceiptCellText);
             firstFIORow = employeeCellAddress.row + 1;
-            firstFIOColumn = employeeCellAddress.column;
+            fioColumn = employeeCellAddress.column;
             lastFIORow = GetLastFIORow();
+            firstDateOfReceiptRow = dateOfReceiptCellAddress.row + 1;
+            dateOfReceiptColumn = dateOfReceiptCellAddress.column;
+            lastDateOfReceiptRow = lastFIORow;
         }
 
         /// <summary>
@@ -115,6 +141,7 @@ namespace Time_Sheet_Constructor.Model
                     {
                         person.MiddleName = personWithId.MiddleName;
                         person.EmployeeId = personWithId.EmployeeId;
+                        person.DateOfReceipt = personWithId.DateOfReceipt;
                     }
                 }
             }
@@ -130,7 +157,7 @@ namespace Time_Sheet_Constructor.Model
         {
             var persons = new List<Person>();
 
-            var column = firstFIOColumn;
+            var column = fioColumn;
 
             var sheet = excel.Workbook.Worksheets[1];
             
@@ -138,7 +165,8 @@ namespace Time_Sheet_Constructor.Model
                 {
                     var names = sheet.Cells[row, column].Value.ToString().Split(' ');
                     var currentId = Convert.ToInt32(sheet.Cells[row, column + 1].Value);
-                    var currentPerson = new Person {LastName = names[0], FirstName = names[1], MiddleName = names[2], EmployeeId = currentId};
+                    var currentDateOfReceipt = Convert.ToDateTime(sheet.Cells[row, column - 15].Value);
+                    var currentPerson = new Person {LastName = names[0], FirstName = names[1], MiddleName = names[2], EmployeeId = currentId, DateOfReceipt=currentDateOfReceipt};
                     persons.Add(currentPerson);
                 }            
 
@@ -158,9 +186,8 @@ namespace Time_Sheet_Constructor.Model
         /// Получение номера строки ячейки "Сотрудник"
         /// </summary>
         /// <returns></returns>
-        private (int,int) GetEmployeeCellAddress()
-        {
-            var searchword = "Сотрудник";
+        private (int,int) GetCellAddress(string searchword)
+        {            
             var address = (row: 1, column: 1);
             var sheet = excel.Workbook.Worksheets[1];
             
