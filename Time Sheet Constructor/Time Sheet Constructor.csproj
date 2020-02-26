@@ -14,6 +14,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,12 +39,6 @@
   <ItemGroup>
     <Reference Include="EPPlus, Version=4.5.3.3, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.5.3.3\lib\net40\EPPlus.dll</HintPath>
-    </Reference>
-    <Reference Include="EPPlus.Extensions, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlus.Extensions.2.0.1\lib\net45\EPPlus.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="EPPlusEnumerable, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\EPPlusEnumerable.1.5.1\lib\EPPlusEnumerable.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
@@ -135,13 +131,14 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="iconfinder_UI_UX_UIUX_About_4470663.png" />
+    <Resource Include="Resorces\iconfinder_UI_UX_UIUX_About_4470663.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="schedule.png" />
+    <Resource Include="Resorces\schedule.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="calendar.png" />
+    <Resource Include="Resorces\calendar.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
