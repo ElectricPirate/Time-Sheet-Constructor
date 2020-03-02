@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Time_Sheet_Constructor"
         mc:Ignorable="d"
-        Title="Конструктор табеля" Height="360" Width="450" WindowStartupLocation="CenterScreen" Icon="calendar.png">
+        Title="Конструктор табеля" Height="360" Width="450" WindowStartupLocation="CenterScreen" Icon="Resorces/calendar.png">
     <Window.Resources>       
         <Style TargetType="StackPanel">
             <Setter Property="Margin" Value="5,5,5,5"/>            

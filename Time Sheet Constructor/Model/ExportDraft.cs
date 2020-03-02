@@ -70,6 +70,11 @@ namespace Time_Sheet_Constructor.Model
         int worktimeCrossingErrors;
 
         /// <summary>
+        /// Первая дата из выгрузки
+        /// </summary>
+        public DateTime FirstTableDate => Main.FirstTableDate;
+
+        /// <summary>
         /// Данные файла шаблона
         /// </summary>
         FileInfo fi;
@@ -110,13 +115,19 @@ namespace Time_Sheet_Constructor.Model
                     }
                     
                     var scheduleDay = 0;
+                    DateTime firstworkdate;
 
                     wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Value = person.GetFullName();
 
-                    if (person.FirstWorkDay < person.DateOfReceipt.Day && person.DateOfReceipt.Year == DateTime.Now.Year && person.DateOfReceipt.Month == DateTime.Now.Month)
+                    var datestring = $"{person.FirstWorkDay}.{FirstTableDate.Month}.{FirstTableDate.Year}";
+                    
+                    DateTime.TryParse(datestring, out firstworkdate);
+
+                    if (firstworkdate < person.DateOfReceipt && FirstTableDate != default)
                     {
                         wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].
-                            AddComment($"Внимание! Первый рабочий день ({person.FirstWorkDay}) раньше даты приема ({person.DateOfReceipt.Day})", "Автор");
+                            AddComment($"Внимание! Первый рабочий день ({firstworkdate.ToShortDateString()}) раньше даты приема ({person.DateOfReceipt.ToShortDateString()})", "Автор");
+                        wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Comment.AutoFit = true;
                         wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Style.Font.Color.SetColor(System.Drawing.Color.Red);
                         firstWorkDayErrors++;
                     }
@@ -190,10 +201,12 @@ namespace Time_Sheet_Constructor.Model
                             {
                                 wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].
                             AddComment($"Внимание! Рабочее время пересекается с отсутствием!", "Автор");
+                                wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Comment.AutoFit = true;
                             }
                             else
                             {
-                                wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Comment.Text += "\nРабочее время пересекается с отсутствием!";                            
+                                wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Comment.Text += "\nРабочее время пересекается с отсутствием!";
+                                wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Comment.AutoFit = true;
                             }
                             
                             wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Style.Font.Color.SetColor(System.Drawing.Color.Red);

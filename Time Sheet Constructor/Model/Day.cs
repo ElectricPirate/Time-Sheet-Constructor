@@ -73,6 +73,9 @@ namespace Time_Sheet_Constructor.Model
             return AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave;
         }
 
+        /// <summary>
+        /// Пересечение рабочих часов и отсутствия
+        /// </summary>
         public bool Crossing => GetCrossings();       
 
         private bool GetCrossings()

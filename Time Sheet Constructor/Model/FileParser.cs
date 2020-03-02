@@ -1,6 +1,7 @@
 ﻿using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace Time_Sheet_Constructor.Model
 {
@@ -10,19 +11,28 @@ namespace Time_Sheet_Constructor.Model
     public class FileParser 
     {
         /// <summary>
-        /// Количество дней в текущем месяце
+        /// Количество дней в месяце
         /// </summary>
         int daysCount;
 
+        /// <summary>
+        /// Первая дата из отчета, для определения месяца выгрузки
+        /// </summary>
+        public DateTime FirstTableDate { get; set; }
+
         ExcelPackage file;
 
+        /// <summary>
+        /// Список операторов
+        /// </summary>
         List<Person> persons;       
 
         public FileParser(ExcelPackage excelReport)
         {
             file = excelReport;
-            persons = GetPersons();
-            daysCount = DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month);
+            persons = GetPersons();            
+            daysCount = 31;
+            FirstTableDate = GetFirstTableDate();
         }
 
         /// <summary>
@@ -45,6 +55,30 @@ namespace Time_Sheet_Constructor.Model
 
             return persons;
 
+        }
+        
+        /// <summary>
+        /// Получаем дату
+        /// </summary>
+        /// <returns></returns>
+        private DateTime GetFirstTableDate()
+        {
+            const string sheetName = "Всего";
+            var firstdaterow = GetPersonCellRow(sheetName) - 1;
+            var firstdatecolumn = 2;
+            DateTime date;
+
+            var d = file.Workbook.Worksheets[sheetName].Cells[firstdaterow, firstdatecolumn].Value; 
+
+            if (d != null && DateTime.TryParse(d.ToString(), out date))
+            {
+                return date;
+            }
+            else
+            {
+                MessageBox.Show("Не могу понять, за какой месяц табель. \nПроверка даты оформления будет отключена.", "Внимание");
+                return default;
+            }            
         }
 
         /// <summary>
@@ -74,7 +108,6 @@ namespace Time_Sheet_Constructor.Model
                     }
                 }
             
-
             return getPersonalCellRow;
         }
 

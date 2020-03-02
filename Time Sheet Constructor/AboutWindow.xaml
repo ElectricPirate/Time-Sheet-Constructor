@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Time_Sheet_Constructor"
         mc:Ignorable="d"
-        Title="О программе" Height="170" Width="350" WindowStartupLocation="CenterScreen" Icon="iconfinder_UI_UX_UIUX_About_4470663.png">
+        Title="О программе" Height="170" Width="350" WindowStartupLocation="CenterScreen" Icon="Resorces/iconfinder_UI_UX_UIUX_About_4470663.png">
     <StackPanel Margin="10,10,10,10">
         <TextBlock HorizontalAlignment="Center">Программа для составления табеля</TextBlock>
         <TextBlock HorizontalAlignment="Center">учета рабочего времени</TextBlock>

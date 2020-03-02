@@ -23,6 +23,9 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         private string employeeFilePath_xlsx;
 
+        /// <summary>
+        /// Список наших операторов
+        /// </summary>
         List<Person> persons;
 
         /// <summary>
@@ -30,6 +33,9 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>        
         private ExcelPackage excel;
 
+        /// <summary>
+        /// Данные файла
+        /// </summary>
         private FileInfo FI;
 
         /// <summary>
@@ -107,6 +113,11 @@ namespace Time_Sheet_Constructor.Model
             return xlsxFile;
         }    
 
+        /// <summary>
+        /// Получаем данные файла, если .xls, то конвертим в .xlsx
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         private FileInfo GetFI(string path)
         {
             FileInfo Fi_xls = new FileInfo(path);

@@ -1,4 +1,5 @@
 ﻿using OfficeOpenXml;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -12,6 +13,7 @@ namespace Time_Sheet_Constructor.Model
         public static string TableLayoutPath { get; set; }
         public static int FirstDay { get; set; }
         public static int LastDay { get; set; }
+        public static DateTime FirstTableDate { get; set; }
 
         public static void Start()
         {     
@@ -21,6 +23,9 @@ namespace Time_Sheet_Constructor.Model
 
             var Persons = new List<Person>();
             var data = new FileParser(table);
+
+            FirstTableDate = data.FirstTableDate;
+
             Persons = data.GetData();               
             var ParseIDs = new EmpoyeeIDParser(Persons, EmployeeFilePath);
             var PeronsWithIDs = ParseIDs.Parse();
