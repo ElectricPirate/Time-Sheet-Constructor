@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -94,7 +95,23 @@ namespace Time_Sheet_Constructor.Model
             this.firstDay = firstDay + 2;
             this.lastDay = lastDay + 2;            
             this.persons = persons;
-            outputName = $"{fi.DirectoryName}\\Табель выход.xlsx";
+            outputName = $"{fi.DirectoryName}\\Табель черновик {GetHalfOfMonth()} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Now.Month)} {DateTime.Now.Year}.xlsx";
+        }
+
+        /// <summary>
+        /// В первой половине месяца делаем аванс, во второй итог
+        /// </summary>
+        /// <returns></returns>
+        private string GetHalfOfMonth()
+        {
+            if (DateTime.Now.Day <= 15)
+            {
+                return "Аванс";
+            }
+            else
+            {
+                return "Итог";
+            }
         }
 
         /// <summary>
