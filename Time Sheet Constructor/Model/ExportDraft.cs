@@ -115,21 +115,31 @@ namespace Time_Sheet_Constructor.Model
                     }
                     
                     var scheduleDay = 0;
-                    DateTime firstworkdate;
+                    DateTime firstWorkDate;
 
                     wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Value = person.GetFullName();
 
                     var datestring = $"{person.FirstWorkDay}.{FirstTableDate.Month}.{FirstTableDate.Year}";
                     
-                    DateTime.TryParse(datestring, out firstworkdate);
+                    DateTime.TryParse(datestring, out firstWorkDate);
 
-                    if (firstworkdate < person.DateOfReceipt && FirstTableDate != default)
+                    // Если оператор начал работать до оформления, то помечаем его
+                    if (firstWorkDate < person.DateOfReceipt && FirstTableDate != default)
                     {
                         wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].
-                            AddComment($"Внимание! Первый рабочий день ({firstworkdate.ToShortDateString()}) раньше даты приема ({person.DateOfReceipt.ToShortDateString()})", "Автор");
+                            AddComment($"Внимание! Первый рабочий день ({firstWorkDate.ToShortDateString()}) раньше даты приема ({person.DateOfReceipt.ToShortDateString()})", "Автор");
                         wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Comment.AutoFit = true;
                         wb.Workbook.Worksheets[draftSheetName].Cells[row, fioColumn].Style.Font.Color.SetColor(System.Drawing.Color.Red);
                         firstWorkDayErrors++;
+                    }
+
+                    // Если оператор начал работать позже оформления, то заполняем выходными дни с даты оформления до первого рабочего дня
+                    if (person.FirstWorkDay > person.DateOfReceipt.Day && FirstTableDate != default)
+                    {
+                        for (var column = person.DateOfReceipt.Day + 2; column < person.FirstWorkDay + 2; column++)
+                        {
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "В";
+                        }
                     }
 
                     wb.Workbook.Worksheets[draftSheetName].Cells[row, emloyeeIdColumn].Value = person.EmployeeId;
