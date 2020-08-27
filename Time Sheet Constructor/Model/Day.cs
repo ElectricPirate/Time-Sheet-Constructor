@@ -19,7 +19,7 @@ namespace Time_Sheet_Constructor.Model
         public double AllWorkTime { get; set; }
 
         /// <summary>
-        /// Всерхурочное рабочее время
+        /// Сверхурочное рабочее время
         /// </summary>
         public double OverTime { get; set; }
 
@@ -59,6 +59,11 @@ namespace Time_Sheet_Constructor.Model
         public bool Truancy { get; set; }
 
         /// <summary>
+        /// Прогул
+        /// </summary>
+        public bool Hooky { get; set; }
+
+        /// <summary>
         /// Отпуск по беременности и родам
         /// </summary>
         public bool MaternityLeave { get; set; }
@@ -75,7 +80,7 @@ namespace Time_Sheet_Constructor.Model
 
         private bool IsScheduledDay()
         {
-            return AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave || PaidDayOff;
+            return AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave || PaidDayOff || Hooky;
         }
 
         /// <summary>
@@ -85,7 +90,7 @@ namespace Time_Sheet_Constructor.Model
 
         private bool GetCrossings()
         {
-            return AllWorkTime != default && (SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave || PaidDayOff);
+            return AllWorkTime != default && (SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave || PaidDayOff || Hooky);
         }
 
     }

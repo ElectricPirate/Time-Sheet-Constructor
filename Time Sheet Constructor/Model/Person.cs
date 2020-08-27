@@ -48,6 +48,10 @@ namespace Time_Sheet_Constructor.Model
             Schedule = new List<Day>();            
         }
 
+        /// <summary>
+        /// Получаем номер первого рабочего дня
+        /// </summary>
+        /// <returns></returns>
         private int GetFirstWorkDay()
         {
             var number = 0;

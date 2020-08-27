@@ -174,6 +174,11 @@ namespace Time_Sheet_Constructor.Model
                             wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "НН";
                         }
 
+                        if (person.Schedule[scheduleDay].Hooky)
+                        {
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "В";
+                        }
+
                         if (person.Schedule[scheduleDay].MaternityLeave)
                         {
                             wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "ОЖ";

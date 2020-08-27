@@ -50,6 +50,7 @@ namespace Time_Sheet_Constructor.Model
             GetUnpaidLeaves();
             GetEducationalLeaves();
             GetTruancys();
+            GetHookies();
             GetMaternityes();
             GetPaidDaysOff();
             GetDaysOff();
@@ -482,7 +483,7 @@ namespace Time_Sheet_Constructor.Model
         /// <returns></returns>
         private void GetTruancys()
         {
-            const string sheet = "Прогул";
+            const string sheet = "Неявка";
             var firstFioLine = GetPersonCellRow(sheet) + 1;
             var lastLineFio = GetLastRowNumber(sheet);
             var firstDayColumn = 2;
@@ -506,6 +507,47 @@ namespace Time_Sheet_Constructor.Model
                             else
                             {
                                 person.Schedule[dayIndex].Truancy = true;
+                            }
+
+                            dayIndex++;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Получение прогулов
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="persons"></param>
+        /// <returns></returns>
+        private void GetHookies()
+        {
+            const string sheet = "Прогул";
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
+            var firstDayColumn = 2;
+            var lastDayColumn = daysCount + 1;
+
+            foreach (var person in persons)
+            {
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    {
+                        for (var column = firstDayColumn; column <= lastDayColumn; column++)
+                        {
+                            var dayIndex = column - 2;
+                            var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
+
+                            if (current == null)
+                            {
+                                person.Schedule[dayIndex].Hooky = false;
+                            }
+                            else
+                            {
+                                person.Schedule[dayIndex].Hooky = true;
                             }
 
                             dayIndex++;
