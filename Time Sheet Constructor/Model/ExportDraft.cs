@@ -15,7 +15,7 @@ using Time_Sheet_Constructor.Annotations;
 namespace Time_Sheet_Constructor.Model 
 {
     /// <summary>
-    /// Заполнение черновика
+    /// Заполнение черновика табеля
     /// </summary>
     public class ExportDraft
     {
@@ -177,6 +177,11 @@ namespace Time_Sheet_Constructor.Model
                         if (person.Schedule[scheduleDay].MaternityLeave)
                         {
                             wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "ОЖ";
+                        }
+
+                        if (person.Schedule[scheduleDay].PaidDayOff)
+                        {
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "ОВ";
                         }
 
                         if (person.Schedule[scheduleDay].DayOff)

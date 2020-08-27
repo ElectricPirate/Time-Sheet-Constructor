@@ -90,7 +90,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\ExportDraft.cs" />
-    <Compile Include="Model\ExportFair.cs" />
     <Compile Include="Model\Day.cs" />
     <Compile Include="Model\EmpoyeeIDParser.cs" />
     <Compile Include="Model\FileParser.cs" />

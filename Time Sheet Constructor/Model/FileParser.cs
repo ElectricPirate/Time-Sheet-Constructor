@@ -51,6 +51,7 @@ namespace Time_Sheet_Constructor.Model
             GetEducationalLeaves();
             GetTruancys();
             GetMaternityes();
+            GetPaidDaysOff();
             GetDaysOff();
 
             return persons;
@@ -546,6 +547,44 @@ namespace Time_Sheet_Constructor.Model
                             else
                             {
                                 person.Schedule[dayIndex].DayOff = true;
+                            }
+
+                            dayIndex++;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Получение оплачиваемых выходных
+        /// </summary>
+        private void GetPaidDaysOff()
+        {
+            const string sheet = "Оплачиваемый выходной";
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
+            var firstDayColumn = 2;
+            var lastDayColumn = daysCount + 1;
+
+            foreach (var person in persons)
+            {
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    {
+                        for (var column = firstDayColumn; column <= lastDayColumn; column++)
+                        {
+                            var dayIndex = column - 2;
+                            var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
+
+                            if (current == null)
+                            {
+                                person.Schedule[dayIndex].PaidDayOff = false;
+                            }
+                            else
+                            {
+                                person.Schedule[dayIndex].PaidDayOff = true;
                             }
 
                             dayIndex++;

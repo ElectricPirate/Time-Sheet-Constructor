@@ -64,13 +64,18 @@ namespace Time_Sheet_Constructor.Model
         public bool MaternityLeave { get; set; }
 
         /// <summary>
+        /// Оплачиваемый выходной. Привет Рома!
+        /// </summary>
+        public bool PaidDayOff { get; set; }
+
+        /// <summary>
         /// Запланирован ли день
         /// </summary>
         public bool ScheduledDay => IsScheduledDay();
 
         private bool IsScheduledDay()
         {
-            return AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave;
+            return AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave || PaidDayOff;
         }
 
         /// <summary>
@@ -80,7 +85,7 @@ namespace Time_Sheet_Constructor.Model
 
         private bool GetCrossings()
         {
-            return AllWorkTime != default && (SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave);
+            return AllWorkTime != default && (SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave || PaidDayOff);
         }
 
     }
