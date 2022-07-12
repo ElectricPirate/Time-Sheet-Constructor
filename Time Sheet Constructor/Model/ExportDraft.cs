@@ -162,58 +162,61 @@ namespace Time_Sheet_Constructor.Model
                     wb.Workbook.Worksheets[draftSheetName].Cells[row, emloyeeIdColumn].Value = person.EmployeeId;
                     
                     for (var column = firstDay; column <= lastDay; column++)
-                    {
+                    {                        
                         if (person.Schedule[scheduleDay].AllWorkTime != 0)
                         {
                             if (person.Schedule[scheduleDay].NightWorkTime != 0)
                             {
+                                //wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value =
+                                //$"{Math.Round(person.Schedule[scheduleDay].AllWorkTime, 1).ToString()}/{Math.Round(person.Schedule[scheduleDay].NightWorkTime, 1).ToString()}";
                                 wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value =
-                                    $"{Math.Round(person.Schedule[scheduleDay].AllWorkTime, 1).ToString()}/{Math.Round(person.Schedule[scheduleDay].NightWorkTime, 1).ToString()}";
+                                    $"{person.Schedule[scheduleDay].AllWorkTime.ToString()}/{person.Schedule[scheduleDay].NightWorkTime.ToString()}";
                             }
                             else
                             {
-                                wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value = $"{Math.Round(person.Schedule[scheduleDay].AllWorkTime, 1).ToString()}";
+                                //wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value = $"{Math.Round(person.Schedule[scheduleDay].AllWorkTime, 1).ToString()}";
+                                wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value = $"{person.Schedule[scheduleDay].AllWorkTime.ToString()}";
                             }
                         }
 
-                        if (person.Schedule[scheduleDay].SickDay)
+                        if (person.Schedule[scheduleDay].SickDay != null)
                         {
-                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "Б";
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].SickDay;
                         }
 
-                        if (person.Schedule[scheduleDay].VacationDay)
+                        if (person.Schedule[scheduleDay].VacationDay != null)
                         {
-                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "ОТ";
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].VacationDay;
                         }
 
-                        if (person.Schedule[scheduleDay].UnpaidLeave)
+                        if (person.Schedule[scheduleDay].UnpaidLeave != null)
                         {
-                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "ДО";
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].UnpaidLeave;
                         }
 
-                        if (person.Schedule[scheduleDay].EducationalLeave)
+                        if (person.Schedule[scheduleDay].EducationalLeave != null)
                         {
-                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "У";
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].EducationalLeave;
                         }
 
-                        if (person.Schedule[scheduleDay].Truancy)
+                        if (person.Schedule[scheduleDay].Truancy != null)
                         {
-                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "НН";
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].Truancy;
                         }
 
-                        if (person.Schedule[scheduleDay].Hooky)
+                        if (person.Schedule[scheduleDay].Hooky != null)
                         {
                             wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "В";
                         }
 
-                        if (person.Schedule[scheduleDay].MaternityLeave)
+                        if (person.Schedule[scheduleDay].MaternityLeave != null)
                         {
-                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "ОЖ";
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].MaternityLeave;
                         }
 
-                        if (person.Schedule[scheduleDay].PaidDayOff)
+                        if (person.Schedule[scheduleDay].PaidDayOff != null)
                         {
-                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += "ОВ";
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].PaidDayOff;
                         }
 
                         if (person.Schedule[scheduleDay].DayOff)

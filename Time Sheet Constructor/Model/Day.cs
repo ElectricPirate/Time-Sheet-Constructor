@@ -13,20 +13,64 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         public int Number { get; set; }
 
+        private double allWorkTime;
+
         /// <summary>
         /// Все рабочее время
         /// </summary>
-        public double AllWorkTime { get; set; }
+        public double AllWorkTime 
+        { 
+            get
+            {
+                return allWorkTime;
+            }
+            set
+            {
+                if (Math.Truncate(value * 10) == 0)
+                    allWorkTime = 0;
+                else
+                    allWorkTime = Math.Round(value, 1);
+            }
+        }
 
+        private double overTime;
         /// <summary>
         /// Сверхурочное рабочее время
         /// </summary>
-        public double OverTime { get; set; }
+        public double OverTime
+        {
+            get
+            {
+                return overTime;
+            }
+            set
+            {
+                if (Math.Truncate(value * 10) == 0)
+                    overTime = 0;
+                else
+                    overTime = Math.Round(value, 1);
+            }
+        }
+
+        private double nightWorkTime;
 
         /// <summary>
         /// Ночное рабочее время
         /// </summary>
-        public double NightWorkTime { get; set; }
+        public double NightWorkTime
+        {
+            get
+            {
+                return nightWorkTime;
+            }
+            set
+            {
+                if (Math.Truncate(value * 10) == 0)
+                    nightWorkTime = 0;
+                else
+                    nightWorkTime = Math.Round(value, 1);
+            }
+        }
 
         /// <summary>
         /// Выходной
@@ -36,52 +80,49 @@ namespace Time_Sheet_Constructor.Model
         /// <summary>
         /// Больничный
         /// </summary>
-        public bool SickDay { get; set; }
+        public string SickDay { get; set; }
 
         /// <summary>
         /// Отпуск ежегодный
         /// </summary>
-        public bool VacationDay { get; set; }
+        public string VacationDay { get; set; }
 
         /// <summary>
         /// Отпуск дополнительный
         /// </summary>
-        public bool UnpaidLeave { get; set; }
+        public string UnpaidLeave { get; set; }
 
         /// <summary>
         /// Отпуск учебный
         /// </summary>
-        public bool EducationalLeave { get; set; }
+        public string EducationalLeave { get; set; }
 
         /// <summary>
         /// Неявка
         /// </summary>
-        public bool Truancy { get; set; }
+        public string Truancy { get; set; }
 
         /// <summary>
         /// Прогул
         /// </summary>
-        public bool Hooky { get; set; }
+        public string Hooky { get; set; }
 
         /// <summary>
         /// Отпуск по беременности и родам
         /// </summary>
-        public bool MaternityLeave { get; set; }
+        public string MaternityLeave { get; set; }
 
         /// <summary>
         /// Оплачиваемый выходной. Привет Рома!
         /// </summary>
-        public bool PaidDayOff { get; set; }
+        public string PaidDayOff { get; set; }
 
         /// <summary>
         /// Запланирован ли день
         /// </summary>
         public bool ScheduledDay => IsScheduledDay();
 
-        private bool IsScheduledDay()
-        {
-            return AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave || PaidDayOff || Hooky;
-        }
+        private bool IsScheduledDay() => AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay != default || VacationDay != default || UnpaidLeave != default || EducationalLeave != default || Truancy != default || MaternityLeave != default || PaidDayOff != default || Hooky != default;
 
         /// <summary>
         /// Пересечение рабочих часов и отсутствия
@@ -90,7 +131,32 @@ namespace Time_Sheet_Constructor.Model
 
         private bool GetCrossings()
         {
-            return AllWorkTime != default && (SickDay || VacationDay || UnpaidLeave || EducationalLeave || Truancy || MaternityLeave || PaidDayOff || Hooky);
+            //return AllWorkTime != default && (SickDay != default || VacationDay != default || UnpaidLeave != default || EducationalLeave != default || Truancy != default || MaternityLeave != default || PaidDayOff != default || Hooky != default);
+
+            var count = 0;
+
+            if (AllWorkTime != default)
+                count++;            
+            if (OverTime != default)
+                count++;
+            if (SickDay != default)
+                count++;
+            if (VacationDay != default)
+                count++;
+            if (UnpaidLeave != default)
+                count++;
+            if (EducationalLeave != default)
+                count++;
+            if(Truancy != default)
+                count++;
+            if(MaternityLeave != default)
+                count++;
+            if(PaidDayOff != default)
+                count++;
+            if(Hooky != default)
+                count++;
+
+            return count>1?true:false;
         }
 
     }

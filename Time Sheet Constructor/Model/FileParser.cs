@@ -336,13 +336,9 @@ namespace Time_Sheet_Constructor.Model
                             var dayIndex = column - 2;
                             var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
 
-                            if (current == null)
+                            if (current != null)
                             {
-                                person.Schedule[dayIndex].SickDay = false;
-                            }
-                            else
-                            {
-                                person.Schedule[dayIndex].SickDay = true;
+                                person.Schedule[dayIndex].SickDay = current.ToString();
                             }
 
                             dayIndex++;
@@ -377,15 +373,11 @@ namespace Time_Sheet_Constructor.Model
                             var dayIndex = column - 2;
                             var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
 
-                            if (current == null)
+                            if (current != null)
                             {
-                                person.Schedule[dayIndex].VacationDay = false;
+                                person.Schedule[dayIndex].VacationDay = current.ToString();
                             }
-                            else
-                            {
-                                person.Schedule[dayIndex].VacationDay = true;
-                            }
-
+                            
                             dayIndex++;
                         }
                     }
@@ -418,13 +410,9 @@ namespace Time_Sheet_Constructor.Model
                             var dayIndex = column - 2;
                             var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
 
-                            if (current == null)
+                            if (current != null)
                             {
-                                person.Schedule[dayIndex].UnpaidLeave = false;
-                            }
-                            else
-                            {
-                                person.Schedule[dayIndex].UnpaidLeave = true;
+                                person.Schedule[dayIndex].UnpaidLeave = current.ToString();
                             }
 
                             dayIndex++;
@@ -459,13 +447,9 @@ namespace Time_Sheet_Constructor.Model
                             var dayIndex = column - 2;
                             var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
 
-                            if (current == null)
+                            if (current != null)
                             {
-                                person.Schedule[dayIndex].EducationalLeave = false;
-                            }
-                            else
-                            {
-                                person.Schedule[dayIndex].EducationalLeave = true;
+                                person.Schedule[dayIndex].EducationalLeave = current.ToString();
                             }
 
                             dayIndex++;
@@ -500,15 +484,11 @@ namespace Time_Sheet_Constructor.Model
                             var dayIndex = column - 2;
                             var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
 
-                            if (current == null)
+                            if (current != null)
                             {
-                                person.Schedule[dayIndex].Truancy = false;
+                                person.Schedule[dayIndex].Truancy = current.ToString();
                             }
-                            else
-                            {
-                                person.Schedule[dayIndex].Truancy = true;
-                            }
-
+                            
                             dayIndex++;
                         }
                     }
@@ -541,14 +521,10 @@ namespace Time_Sheet_Constructor.Model
                             var dayIndex = column - 2;
                             var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
 
-                            if (current == null)
+                            if (current != null)
                             {
-                                person.Schedule[dayIndex].Hooky = false;
-                            }
-                            else
-                            {
-                                person.Schedule[dayIndex].Hooky = true;
-                            }
+                                person.Schedule[dayIndex].Hooky = current.ToString();
+                            }                            
 
                             dayIndex++;
                         }
@@ -620,15 +596,11 @@ namespace Time_Sheet_Constructor.Model
                             var dayIndex = column - 2;
                             var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
 
-                            if (current == null)
+                            if (current != null)
                             {
-                                person.Schedule[dayIndex].PaidDayOff = false;
+                                person.Schedule[dayIndex].PaidDayOff = current.ToString();
                             }
-                            else
-                            {
-                                person.Schedule[dayIndex].PaidDayOff = true;
-                            }
-
+                            
                             dayIndex++;
                         }
                     }
@@ -661,14 +633,10 @@ namespace Time_Sheet_Constructor.Model
                             var dayIndex = column - 2;
                             var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
 
-                            if (current == null)
+                            if (current != null)
                             {
-                                person.Schedule[dayIndex].MaternityLeave = false;
-                            }
-                            else
-                            {
-                                person.Schedule[dayIndex].MaternityLeave = true;
-                            }
+                                person.Schedule[dayIndex].MaternityLeave = current.ToString();
+                            }                            
 
                             dayIndex++;
                         }
