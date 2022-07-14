@@ -13,7 +13,7 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         public int Number { get; set; }
 
-        private double allWorkTime;
+        private double _allWorkTime;
 
         /// <summary>
         /// Все рабочее время
@@ -22,18 +22,18 @@ namespace Time_Sheet_Constructor.Model
         { 
             get
             {
-                return allWorkTime;
+                return _allWorkTime;
             }
             set
             {
                 if (Math.Truncate(value * 10) == 0)
-                    allWorkTime = 0;
+                    _allWorkTime = 0;
                 else
-                    allWorkTime = Math.Round(value, 1);
+                    _allWorkTime = Math.Round(value, 1);
             }
         }
 
-        private double overTime;
+        private double _overTime;
         /// <summary>
         /// Сверхурочное рабочее время
         /// </summary>
@@ -41,18 +41,18 @@ namespace Time_Sheet_Constructor.Model
         {
             get
             {
-                return overTime;
+                return _overTime;
             }
             set
             {
                 if (Math.Truncate(value * 10) == 0)
-                    overTime = 0;
+                    _overTime = 0;
                 else
-                    overTime = Math.Round(value, 1);
+                    _overTime = Math.Round(value, 1);
             }
         }
 
-        private double nightWorkTime;
+        private double _nightWorkTime;
 
         /// <summary>
         /// Ночное рабочее время
@@ -61,14 +61,14 @@ namespace Time_Sheet_Constructor.Model
         {
             get
             {
-                return nightWorkTime;
+                return _nightWorkTime;
             }
             set
             {
                 if (Math.Truncate(value * 10) == 0)
-                    nightWorkTime = 0;
+                    _nightWorkTime = 0;
                 else
-                    nightWorkTime = Math.Round(value, 1);
+                    _nightWorkTime = Math.Round(value, 1);
             }
         }
 
@@ -77,45 +77,133 @@ namespace Time_Sheet_Constructor.Model
         /// </summary>
         public bool DayOff { get; set; }
 
+        private string _sickDay;
         /// <summary>
         /// Больничный
         /// </summary>
-        public string SickDay { get; set; }
+        public string SickDay 
+        {
+            get
+            {
+                return _sickDay;
+            }
+            set
+            {
+                _sickDay = $"Б/{value}";
+            }
+        }
 
+        private string _vacationDay;
         /// <summary>
         /// Отпуск ежегодный
         /// </summary>
-        public string VacationDay { get; set; }
+        public string VacationDay
+        {
+            get
+            {
+                return _vacationDay;
+            }
+            set
+            {
+                _vacationDay = $"ОТ/{value}";
+            }
+        }
 
+        private string _unpaidLeave;
         /// <summary>
         /// Отпуск дополнительный
         /// </summary>
-        public string UnpaidLeave { get; set; }
+        public string UnpaidLeave
+        {
+            get
+            {
+                return _unpaidLeave;
+            }
+            set
+            {
+                _unpaidLeave = $"ДО/{value}";
+            }
+        }
 
+        private string _educationLeave;
         /// <summary>
         /// Отпуск учебный
         /// </summary>
-        public string EducationalLeave { get; set; }
+        public string EducationalLeave
+        {
+            get
+            {
+                return _educationLeave;
+            }
+            set
+            {
+                _educationLeave = $"У/{value}";
+            }
+        }
 
+        private string _truancy;
         /// <summary>
         /// Неявка
         /// </summary>
-        public string Truancy { get; set; }
+        public string Truancy
+        {
+            get
+            {
+                return _truancy;
+            }
+            set
+            {
+                _truancy = $"НН/{value}";
+            }
+        }
 
+        private string _hooky;
         /// <summary>
         /// Прогул
         /// </summary>
-        public string Hooky { get; set; }
+        public string Hooky
+        {
+            get
+            {
+                return _hooky;
+            }
+            set
+            {
+                _hooky = $"ПР/{value}";
+            }
+        }
 
+        private string _maternityLeave;
         /// <summary>
         /// Отпуск по беременности и родам
         /// </summary>
-        public string MaternityLeave { get; set; }
+        public string MaternityLeave
+        {
+            get
+            {
+                return _maternityLeave;
+            }
+            set
+            {
+                _maternityLeave = $"ОЖ/{value}";
+            }
+        }
 
+        private string _paidDayOff;
         /// <summary>
         /// Оплачиваемый выходной. Привет Рома!
         /// </summary>
-        public string PaidDayOff { get; set; }
+        public string PaidDayOff
+        {
+            get
+            {
+                return _paidDayOff;
+            }
+            set
+            {
+                _paidDayOff = $"ОВ/{value}";
+            }
+        }
 
         /// <summary>
         /// Запланирован ли день
