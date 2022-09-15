@@ -224,9 +224,7 @@ namespace Time_Sheet_Constructor.Model
             var count = 0;
 
             if (AllWorkTime != default)
-                count++;            
-            if (OverTime != default)
-                count++;
+                count++; 
             if (SickDay != default)
                 count++;
             if (VacationDay != default)
