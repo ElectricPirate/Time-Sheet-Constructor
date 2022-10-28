@@ -219,6 +219,16 @@ namespace Time_Sheet_Constructor.Model
                             wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].PaidDayOff;
                         }
 
+                        if (person.Schedule[scheduleDay].BusinessTrip != null)
+                        {
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].BusinessTrip;
+                        }
+
+                        if (person.Schedule[scheduleDay].StateDuties != null)
+                        {
+                            wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value += person.Schedule[scheduleDay].StateDuties;
+                        }
+
                         if (person.Schedule[scheduleDay].DayOff)
                         {
                             if (wb.Workbook.Worksheets[draftSheetName].Cells[row, column].Value == null)

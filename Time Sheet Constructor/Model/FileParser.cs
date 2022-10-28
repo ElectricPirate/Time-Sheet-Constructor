@@ -54,6 +54,8 @@ namespace Time_Sheet_Constructor.Model
             GetMaternityes();
             GetPaidDaysOff();
             GetDaysOff();
+            GetStateDuties();
+            GetBusinessTrips();
 
             return persons;
 
@@ -601,6 +603,74 @@ namespace Time_Sheet_Constructor.Model
                                 person.Schedule[dayIndex].PaidDayOff = current.ToString();
                             }
                             
+                            dayIndex++;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Получение дней с гос. обязанностями
+        /// </summary>
+        private void GetStateDuties()
+        {
+            const string sheet = "Гос обязанности";
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
+            var firstDayColumn = 2;
+            var lastDayColumn = daysCount + 1;
+
+            foreach (var person in persons)
+            {
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    {
+                        for (var column = firstDayColumn; column <= lastDayColumn; column++)
+                        {
+                            var dayIndex = column - 2;
+                            var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
+
+                            if (current != null)
+                            {
+                                person.Schedule[dayIndex].StateDuties = current.ToString();
+                            }
+
+                            dayIndex++;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Получение дней с гос. обязанностями
+        /// </summary>
+        private void GetBusinessTrips()
+        {
+            const string sheet = "Командировка";
+            var firstFioLine = GetPersonCellRow(sheet) + 1;
+            var lastLineFio = GetLastRowNumber(sheet);
+            var firstDayColumn = 2;
+            var lastDayColumn = daysCount + 1;
+
+            foreach (var person in persons)
+            {
+                for (var row = firstFioLine; row <= lastLineFio; row++)
+                {
+                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    {
+                        for (var column = firstDayColumn; column <= lastDayColumn; column++)
+                        {
+                            var dayIndex = column - 2;
+                            var current = file.Workbook.Worksheets[sheet].Cells[row, column].Value;
+
+                            if (current != null)
+                            {
+                                person.Schedule[dayIndex].BusinessTrip = current.ToString();
+                            }
+
                             dayIndex++;
                         }
                     }

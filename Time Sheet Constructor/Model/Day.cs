@@ -205,12 +205,44 @@ namespace Time_Sheet_Constructor.Model
             }
         }
 
+        private string _businessTrip;
+        /// <summary>
+        /// Командировочный день
+        /// </summary>
+        public string BusinessTrip
+        {
+            get
+            {
+                return _businessTrip;
+            }
+            set
+            {
+                _businessTrip = $"К/{value}";
+            }
+        }
+
+        private string _stateDuties;
+        /// <summary>
+        /// Гос. обязанности
+        /// </summary>
+        public string StateDuties
+        {
+            get
+            {
+                return _stateDuties;
+            }
+            set
+            {
+                _stateDuties = $"Г/{value}";
+            }
+        }
+
         /// <summary>
         /// Запланирован ли день
         /// </summary>
         public bool ScheduledDay => IsScheduledDay();
 
-        private bool IsScheduledDay() => AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay != default || VacationDay != default || UnpaidLeave != default || EducationalLeave != default || Truancy != default || MaternityLeave != default || PaidDayOff != default || Hooky != default;
+        private bool IsScheduledDay() => AllWorkTime != default || OverTime != default || NightWorkTime != default || DayOff || SickDay != default || VacationDay != default || UnpaidLeave != default || EducationalLeave != default || Truancy != default || MaternityLeave != default || PaidDayOff != default || Hooky != default || BusinessTrip != default || StateDuties != default;
 
         /// <summary>
         /// Пересечение рабочих часов и отсутствия
@@ -233,13 +265,17 @@ namespace Time_Sheet_Constructor.Model
                 count++;
             if (EducationalLeave != default)
                 count++;
-            if(Truancy != default)
+            if (Truancy != default)
                 count++;
-            if(MaternityLeave != default)
+            if (MaternityLeave != default)
                 count++;
-            if(PaidDayOff != default)
+            if (PaidDayOff != default)
                 count++;
-            if(Hooky != default)
+            if (Hooky != default)
+                count++;
+            if (BusinessTrip != default)
+                count++;
+            if (StateDuties != default)
                 count++;
 
             return count>1?true:false;
