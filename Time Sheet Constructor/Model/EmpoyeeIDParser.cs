@@ -174,10 +174,11 @@ namespace Time_Sheet_Constructor.Model
             
                 for (var row = firstFIORow; row <= lastFIORow; row++)
                 {
-                    var names = sheet.Cells[row, column].Value.ToString().Split(' ');
                     var currentId = Convert.ToInt32(sheet.Cells[row, column + 1].Value);
                     var currentDateOfReceipt = Convert.ToDateTime(sheet.Cells[row, dateOfReceiptColumn].Value);
-                    var currentPerson = new Person {LastName = names[0], FirstName = names[1], MiddleName = names[2], EmployeeId = currentId, DateOfReceipt = currentDateOfReceipt};
+                    var currentPerson = Person.ParseName(sheet.Cells[row, column].Value.ToString());
+                    currentPerson.EmployeeId = currentId;
+                    currentPerson.DateOfReceipt = currentDateOfReceipt;
                     persons.Add(currentPerson);
                 }            
 

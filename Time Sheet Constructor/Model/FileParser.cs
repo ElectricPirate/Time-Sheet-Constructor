@@ -181,10 +181,7 @@ namespace Time_Sheet_Constructor.Model
                            
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    var names = sheet.Cells[row, 1].Value.ToString().Split(' ');
-                    var lastName = names[0];
-                    var firstName = names[1];
-                    persons.Add(new Person() { FirstName = firstName, LastName = lastName });
+                    persons.Add(Person.ParseName(sheet.Cells[row, 1].Value.ToString()));
                 }            
 
             return persons;
@@ -208,7 +205,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -249,7 +246,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -290,7 +287,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -331,7 +328,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -368,7 +365,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -405,7 +402,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -442,7 +439,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -479,7 +476,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -516,7 +513,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -553,7 +550,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -591,7 +588,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -625,7 +622,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -659,7 +656,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {
@@ -696,7 +693,7 @@ namespace Time_Sheet_Constructor.Model
             {
                 for (var row = firstFioLine; row <= lastLineFio; row++)
                 {
-                    if (person.GetShortName().Equals(file.Workbook.Worksheets[sheet].Cells[row, 1].Value))
+                    if (person.IsSamePerson(file.Workbook.Worksheets[sheet].Cells[row, 1].Value?.ToString()))
                     {
                         for (var column = firstDayColumn; column <= lastDayColumn; column++)
                         {

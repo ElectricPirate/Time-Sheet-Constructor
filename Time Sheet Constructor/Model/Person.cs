@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Time_Sheet_Constructor.Model
 {
@@ -48,6 +49,41 @@ namespace Time_Sheet_Constructor.Model
             Schedule = new List<Day>();            
         }
 
+        public static Person ParseName(string fullName)
+        {
+            if (string.IsNullOrWhiteSpace(fullName))
+            {
+                throw new ArgumentException("ФИО должно содержать минимум фамилию и имя.", nameof(fullName));
+            }
+
+            var names = fullName.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (names.Length < 2)
+            {
+                throw new ArgumentException("ФИО должно содержать минимум фамилию и имя.", nameof(fullName));
+            }
+
+            return new Person
+            {
+                LastName = names[0],
+                FirstName = names[1],
+                MiddleName = string.Join(" ", names.Skip(2))
+            };
+        }
+
+        public bool IsSamePerson(string fullName)
+        {
+            try
+            {
+                var person = ParseName(fullName);
+                return LastName.Equals(person.LastName) && FirstName.Equals(person.FirstName);
+            }
+            catch (ArgumentException)
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// Получаем номер первого рабочего дня
         /// </summary>
@@ -82,7 +118,7 @@ namespace Time_Sheet_Constructor.Model
         /// <returns></returns>
         public string GetFullName()
         {
-            return $"{LastName} {FirstName} {MiddleName}";
+            return string.IsNullOrWhiteSpace(MiddleName) ? GetShortName() : $"{LastName} {FirstName} {MiddleName}";
         }
 
     }
